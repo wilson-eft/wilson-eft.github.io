@@ -1,0 +1,1298 @@
+<!doctype html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+
+    <title>wilson.run.wet.definitions API documentation</title>
+    <meta name="description" content="Dictionaries assigning Wilson coefficients to classes and sectors,
+needed to construct appropriate v..." />
+
+  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/public/plugins/katex/katex.min.css">
+  
+  <style type="text/css">
+  
+* {
+  box-sizing: border-box;
+}
+/*! normalize.css v1.1.1 | MIT License | git.io/normalize */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+/**
+ * Correct `block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+    display: block;
+}
+
+/**
+ * Correct `inline-block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Firefox 3, and Safari 4.
+ * Known issue: no IE 6 support.
+ */
+
+[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/**
+ * 1. Prevent system color scheme's background color being used in Firefox, IE,
+ *    and Opera.
+ * 2. Prevent system color scheme's text color being used in Firefox, IE, and
+ *    Opera.
+ * 3. Correct text resizing oddly in IE 6/7 when body `font-size` is set using
+ *    `em` units.
+ * 4. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+    background: #fff; /* 1 */
+    color: #000; /* 2 */
+    font-size: 100%; /* 3 */
+    -webkit-text-size-adjust: 100%; /* 4 */
+    -ms-text-size-adjust: 100%; /* 4 */
+}
+
+/**
+ * Address `font-family` inconsistency between `textarea` and other form
+ * elements.
+ */
+
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif;
+}
+
+/**
+ * Address margins handled incorrectly in IE 6/7.
+ */
+
+body {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/**
+ * Address `outline` inconsistency between Chrome and other browsers.
+ */
+
+a:focus {
+    outline: thin dotted;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/**
+ * Address font sizes and margins set differently in IE 6/7.
+ * Address font sizes within `section` and `article` in Firefox 4+, Safari 5,
+ * and Chrome.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+}
+
+h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+}
+
+h6 {
+    font-size: 0.67em;
+    margin: 2.33em 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Safari 5, and Chrome.
+ */
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 3+, Safari 4/5, and Chrome.
+ */
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    margin: 1em 40px;
+}
+
+/**
+ * Address styling not present in Safari 5 and Chrome.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ * Known issue: no IE 6/7 normalization.
+ */
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 6/7/8/9.
+ */
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+p,
+pre {
+    margin: 1em 0;
+}
+
+/**
+ * Correct font family set oddly in IE 6, Safari 4/5, and Chrome.
+ */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+/**
+ * Improve readability of pre-formatted text in all browsers.
+ */
+
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/**
+ * Address CSS quotes not supported in IE 6/7.
+ */
+
+q {
+    quotes: none;
+}
+
+/**
+ * Address `quotes` property not supported in Safari 4.
+ */
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+    font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0;
+}
+
+dd {
+    margin: 0 0 0 40px;
+}
+
+/**
+ * Address paddings set differently in IE 6/7.
+ */
+
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px;
+}
+
+/**
+ * Correct list images handled incorrectly in IE 7.
+ */
+
+nav ul,
+nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/**
+ * 1. Remove border when inside `a` element in IE 6/7/8/9 and Firefox 3.
+ * 2. Improve image quality when scaled in IE 7.
+ */
+
+img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/**
+ * Correct overflow displayed oddly in IE 9.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 6/7/8/9, Safari 5, and Opera 11.
+ */
+
+figure {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/**
+ * Correct margin displayed oddly in IE 6/7.
+ */
+
+form {
+    margin: 0;
+}
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct color not being inherited in IE 6/7/8/9.
+ * 2. Correct text not wrapping in Firefox 3.
+ * 3. Correct alignment displayed oddly in IE 6/7.
+ */
+
+legend {
+    border: 0; /* 1 */
+    padding: 0;
+    white-space: normal; /* 2 */
+    *margin-left: -7px; /* 3 */
+}
+
+/**
+ * 1. Correct font size not being inherited in all browsers.
+ * 2. Address margins set differently in IE 6/7, Firefox 3+, Safari 5,
+ *    and Chrome.
+ * 3. Improve appearance and consistency in all browsers.
+ */
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+/**
+ * Address Firefox 3+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+button,
+input {
+    line-height: normal;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Chrome, Safari 5+, and IE 6+.
+ * Correct `select` style inheritance in Firefox 4+ and Opera.
+ */
+
+button,
+select {
+    text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Remove inner spacing in IE 7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE 6.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+    *overflow: visible;  /* 4 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+    cursor: default;
+}
+
+/**
+ * 1. Address box sizing set to content-box in IE 8/9.
+ * 2. Remove excess padding in IE 8/9.
+ * 3. Remove excess padding in IE 7.
+ *    Known issue: excess padding remains in IE 6.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/**
+ * Remove inner padding and border in Firefox 3+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/**
+ * 1. Remove default vertical scrollbar in IE 6/7/8/9.
+ * 2. Improve readability and alignment in all browsers.
+ */
+
+textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+    .katex {
+      font-size:1em;
+    }
+    .katex .mathit, .katex .mathrm {
+      font-family: 'Noto Sans';
+    }
+  </style>
+
+  <style type="text/css">
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+  body {
+    background: #fff;
+    font-family: "Source Sans Pro", "Helvetica Neueue", Helvetica, sans;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6em;
+  }
+  #content {
+    width: 70%;
+    max-width: 850px;
+    float: left;
+    padding: 30px 60px;
+    border-left: 1px solid #ddd;
+  }
+  #sidebar {
+    width: 25%;
+    float: left;
+    padding: 30px;
+    overflow: hidden;
+  }
+  #nav {
+    font-size: 130%;
+    margin: 0 0 15px 0;
+  }
+
+  #top {
+    display: block;
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    font-size: .85em;
+    text-transform: uppercase;
+  }
+
+  #footer {
+    font-size: .75em;
+    padding: 5px 30px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+  }
+    #footer p {
+      margin: 0 0 0 30px;
+      display: inline-block;
+    }
+
+  h1, h2, h3, h4, h5 {
+    font-weight: 300;
+  }
+  h1 {
+    font-size: 2.5em;
+    line-height: 1.1em;
+    margin: 0 0 .50em 0;
+  }
+
+  h2 {
+    font-size: 1.75em;
+    margin: 1em 0 .50em 0;
+  }
+
+  h3 {
+    margin: 25px 0 10px 0;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 105%;
+  }
+
+  a {
+    color: #058;
+    text-decoration: none;
+    transition: color .3s ease-in-out;
+  }
+
+  a:hover {
+    color: #e08524;
+    transition: color .3s ease-in-out;
+  }
+
+  pre, code, .mono, .name {
+    font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
+  }
+
+  .title .name {
+    font-weight: bold;
+  }
+  .section-title {
+    margin-top: 2em;
+  }
+  .ident {
+    color: #900;
+  }
+
+  code {
+    background: #f9f9f9;
+  }
+
+  pre {
+    background: #fefefe;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 0 #f3f3f3;
+    margin: 0 30px;
+    padding: 15px 30px;
+  }
+
+  .codehilite {
+    margin: 0 30px 10px 30px;
+  }
+
+    .codehilite pre {
+      margin: 0;
+    }
+    .codehilite .err { background: #ff3300; color: #fff !important; }
+
+  table#module-list {
+    font-size: 110%;
+  }
+
+    table#module-list tr td:first-child {
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+
+    table#module-list td {
+      vertical-align: top;
+      padding-bottom: 8px;
+    }
+
+      table#module-list td p {
+        margin: 0 0 7px 0;
+      }
+
+  .def {
+    display: table;
+  }
+
+    .def p {
+      display: table-cell;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .def p:first-child {
+      white-space: nowrap;
+    }
+
+    .def p:last-child {
+      width: 100%;
+    }
+
+
+  #index {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+    ul#index .class_name {
+      /* font-size: 110%; */
+      font-weight: bold;
+    }
+    #index ul {
+      margin: 0;
+    }
+
+  .item {
+    margin: 0 0 15px 0;
+  }
+
+    .item .class {
+      margin: 0 0 25px 30px;
+    }
+
+      .item .class ul.class_list {
+        margin: 0 0 20px 0;
+      }
+
+    .item .name {
+      background: #fafafa;
+      margin: 0;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 3px;
+      display: inline-block;
+      min-width: 40%;
+    }
+      .item .name:hover {
+        background: #f6f6f6;
+      }
+
+    .item .empty_desc {
+      margin: 0 0 5px 0;
+      padding: 0;
+    }
+
+    .item .inheritance {
+      margin: 3px 0 0 30px;
+    }
+
+    .item .inherited {
+      color: #666;
+    }
+
+    .item .desc {
+      padding: 0 8px;
+      margin: 0;
+    }
+
+      .item .desc p {
+        margin: 0 0 10px 0;
+      }
+
+    .source_cont {
+      margin: 0;
+      padding: 0;
+    }
+
+    .source_link a {
+      background: #ffc300;
+      font-weight: 400;
+      font-size: .75em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 1px 1px 0 #f4b700;
+
+      padding: 3px 8px;
+      border-radius: 2px;
+      transition: background .3s ease-in-out;
+    }
+      .source_link a:hover {
+        background: #FF7200;
+        text-shadow: none;
+        transition: background .3s ease-in-out;
+      }
+
+    .source {
+      display: none;
+      max-height: 600px;
+      overflow-y: scroll;
+      margin-bottom: 15px;
+    }
+
+      .source .codehilite {
+        margin: 0;
+      }
+
+  .desc h1, .desc h2, .desc h3 {
+    font-size: 100% !important;
+  }
+  .clear {
+    clear: both;
+  }
+
+  @media all and (max-width: 950px) {
+    #sidebar {
+      width: 35%;
+    }
+    #content {
+      width: 65%;
+    }
+  }
+  @media all and (max-width: 650px) {
+    #top {
+      display: none;
+    }
+    #sidebar {
+      float: none;
+      width: auto;
+    }
+    #content {
+      float: none;
+      width: auto;
+      padding: 30px;
+    }
+
+    #index ul {
+      padding: 0;
+      margin-bottom: 15px;
+    }
+    #index ul li {
+      display: inline-block;
+      margin-right: 30px;
+    }
+    #footer {
+      text-align: left;
+    }
+    #footer p {
+      display: block;
+      margin: inherit;
+    }
+  }
+
+  /*****************************/
+
+  </style>
+
+  <style type="text/css">
+  .codehilite .hll { background-color: #ffffcc }
+.codehilite  { background: #f8f8f8; }
+.codehilite .c { color: #408080; font-style: italic } /* Comment */
+.codehilite .err { border: 1px solid #FF0000 } /* Error */
+.codehilite .k { color: #008000; font-weight: bold } /* Keyword */
+.codehilite .o { color: #666666 } /* Operator */
+.codehilite .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.codehilite .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.codehilite .cp { color: #BC7A00 } /* Comment.Preproc */
+.codehilite .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.codehilite .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.codehilite .cs { color: #408080; font-style: italic } /* Comment.Special */
+.codehilite .gd { color: #A00000 } /* Generic.Deleted */
+.codehilite .ge { font-style: italic } /* Generic.Emph */
+.codehilite .gr { color: #FF0000 } /* Generic.Error */
+.codehilite .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #00A000 } /* Generic.Inserted */
+.codehilite .go { color: #888888 } /* Generic.Output */
+.codehilite .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #0044DD } /* Generic.Traceback */
+.codehilite .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.codehilite .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.codehilite .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.codehilite .kp { color: #008000 } /* Keyword.Pseudo */
+.codehilite .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.codehilite .kt { color: #B00040 } /* Keyword.Type */
+.codehilite .m { color: #666666 } /* Literal.Number */
+.codehilite .s { color: #BA2121 } /* Literal.String */
+.codehilite .na { color: #7D9029 } /* Name.Attribute */
+.codehilite .nb { color: #008000 } /* Name.Builtin */
+.codehilite .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.codehilite .no { color: #880000 } /* Name.Constant */
+.codehilite .nd { color: #AA22FF } /* Name.Decorator */
+.codehilite .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.codehilite .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.codehilite .nf { color: #0000FF } /* Name.Function */
+.codehilite .nl { color: #A0A000 } /* Name.Label */
+.codehilite .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.codehilite .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.codehilite .nv { color: #19177C } /* Name.Variable */
+.codehilite .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.codehilite .w { color: #bbbbbb } /* Text.Whitespace */
+.codehilite .mb { color: #666666 } /* Literal.Number.Bin */
+.codehilite .mf { color: #666666 } /* Literal.Number.Float */
+.codehilite .mh { color: #666666 } /* Literal.Number.Hex */
+.codehilite .mi { color: #666666 } /* Literal.Number.Integer */
+.codehilite .mo { color: #666666 } /* Literal.Number.Oct */
+.codehilite .sa { color: #BA2121 } /* Literal.String.Affix */
+.codehilite .sb { color: #BA2121 } /* Literal.String.Backtick */
+.codehilite .sc { color: #BA2121 } /* Literal.String.Char */
+.codehilite .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.codehilite .s2 { color: #BA2121 } /* Literal.String.Double */
+.codehilite .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.codehilite .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.codehilite .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.codehilite .sx { color: #008000 } /* Literal.String.Other */
+.codehilite .sr { color: #BB6688 } /* Literal.String.Regex */
+.codehilite .s1 { color: #BA2121 } /* Literal.String.Single */
+.codehilite .ss { color: #19177C } /* Literal.String.Symbol */
+.codehilite .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #0000FF } /* Name.Function.Magic */
+.codehilite .vc { color: #19177C } /* Name.Variable.Class */
+.codehilite .vg { color: #19177C } /* Name.Variable.Global */
+.codehilite .vi { color: #19177C } /* Name.Variable.Instance */
+.codehilite .vm { color: #19177C } /* Name.Variable.Magic */
+.codehilite .il { color: #666666 } /* Literal.Number.Integer.Long */
+  </style>
+
+  <style type="text/css">
+  
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+    /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important; /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; /* h5bp.com/t */
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
+
+  </style>
+
+  <script type="text/javascript">
+  function toggle(id, $link) {
+    $node = document.getElementById(id);
+    if (!$node)
+    return;
+    if (!$node.style.display || $node.style.display == 'none') {
+    $node.style.display = 'block';
+    $link.innerHTML = 'Hide source &nequiv;';
+    } else {
+    $node.style.display = 'none';
+    $link.innerHTML = 'Show source &equiv;';
+    }
+  }
+  </script>
+    <script src="/public/plugins/katex/katex.min.js"></script>
+    <script src="/public/plugins/katex/auto-render.min.js"></script>
+</head>
+<body>
+<a href="#" id="top">Top</a>
+
+<div id="container">
+    
+  
+  <div id="sidebar">
+    <h1>Index</h1>
+    <ul id="index">
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#wilson.run.wet.definitions.c">c</a></li>
+    <li class="mono"><a href="#wilson.run.wet.definitions.classes">classes</a></li>
+    <li class="mono"><a href="#wilson.run.wet.definitions.coeffs">coeffs</a></li>
+    <li class="mono"><a href="#wilson.run.wet.definitions.s">s</a></li>
+    <li class="mono"><a href="#wilson.run.wet.definitions.sectors">sectors</a></li>
+    <li class="mono"><a href="#wilson.run.wet.definitions.ss">ss</a></li>
+  </ul>
+
+    </li>
+
+
+
+    </ul>
+  </div>
+
+    <article id="content">
+      
+  
+
+  
+
+
+  <header id="section-intro">
+  <h1 class="title"><span class="name">wilson.run.wet.definitions</span> module</h1>
+  <p>Dictionaries assigning Wilson coefficients to classes and sectors,
+needed to construct appropriate vectors.</p>
+  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.run.wet.definitions', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.run.wet.definitions" class="source">
+    <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;Dictionaries assigning Wilson coefficients to classes and sectors,</span>
+<span class="sd">needed to construct appropriate vectors.&quot;&quot;&quot;</span>
+
+<span class="n">classes</span> <span class="o">=</span> <span class="p">{</span>
+<span class="s1">&#39;I&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;sbsb&#39;</span><span class="p">,</span> <span class="s1">&#39;dbdb&#39;</span><span class="p">,</span> <span class="s1">&#39;sdsd&#39;</span><span class="p">],</span>
+
+<span class="s1">&#39;Ie&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;tauetaue&#39;</span><span class="p">,</span> <span class="s1">&#39;muemue&#39;</span><span class="p">,</span> <span class="s1">&#39;taumutaumu&#39;</span><span class="p">],</span>
+<span class="s1">&#39;Iu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;cucu&#39;</span><span class="p">],</span>
+
+<span class="s1">&#39;II&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ubenu&#39;</span><span class="p">,</span> <span class="s1">&#39;ubmunu&#39;</span><span class="p">,</span> <span class="s1">&#39;ubtaunu&#39;</span><span class="p">,</span> <span class="s1">&#39;cbenu&#39;</span><span class="p">,</span> <span class="s1">&#39;cbmunu&#39;</span><span class="p">,</span> <span class="s1">&#39;cbtaunu&#39;</span><span class="p">,</span> <span class="s1">&#39;usenu&#39;</span><span class="p">,</span> <span class="s1">&#39;usmunu&#39;</span><span class="p">,</span> <span class="s1">&#39;ustaunu&#39;</span><span class="p">,</span> <span class="s1">&#39;csenu&#39;</span><span class="p">,</span> <span class="s1">&#39;csmunu&#39;</span><span class="p">,</span> <span class="s1">&#39;cstaunu&#39;</span><span class="p">,</span> <span class="s1">&#39;udenu&#39;</span><span class="p">,</span> <span class="s1">&#39;udmunu&#39;</span><span class="p">,</span> <span class="s1">&#39;udtaunu&#39;</span><span class="p">,</span> <span class="s1">&#39;cdenu&#39;</span><span class="p">,</span> <span class="s1">&#39;cdmunu&#39;</span><span class="p">,</span> <span class="s1">&#39;cdtaunu&#39;</span><span class="p">],</span>
+<span class="s1">&#39;III&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;sbuc&#39;</span><span class="p">,</span> <span class="s1">&#39;sbcu&#39;</span><span class="p">,</span> <span class="s1">&#39;dbuc&#39;</span><span class="p">,</span> <span class="s1">&#39;dbcu&#39;</span><span class="p">,</span> <span class="s1">&#39;sduc&#39;</span><span class="p">,</span> <span class="s1">&#39;sdcu&#39;</span><span class="p">],</span>
+<span class="s1">&#39;IV&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;sbsd&#39;</span><span class="p">,</span> <span class="s1">&#39;dbsb&#39;</span><span class="p">,</span> <span class="s1">&#39;dbds&#39;</span><span class="p">],</span>
+
+<span class="s1">&#39;Vb&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;sbemu&#39;</span><span class="p">,</span> <span class="s1">&#39;sbmue&#39;</span><span class="p">,</span> <span class="s1">&#39;sbetau&#39;</span><span class="p">,</span> <span class="s1">&#39;sbtaue&#39;</span><span class="p">,</span> <span class="s1">&#39;sbmutau&#39;</span><span class="p">,</span> <span class="s1">&#39;sbtaumu&#39;</span><span class="p">,</span> <span class="s1">&#39;dbemu&#39;</span><span class="p">,</span> <span class="s1">&#39;dbmue&#39;</span><span class="p">,</span> <span class="s1">&#39;dbetau&#39;</span><span class="p">,</span> <span class="s1">&#39;dbtaue&#39;</span><span class="p">,</span> <span class="s1">&#39;dbmutau&#39;</span><span class="p">,</span> <span class="s1">&#39;dbtaumu&#39;</span><span class="p">,</span> <span class="s1">&#39;sdemu&#39;</span><span class="p">,</span> <span class="s1">&#39;sdmue&#39;</span><span class="p">,</span> <span class="s1">&#39;sdetau&#39;</span><span class="p">,</span> <span class="s1">&#39;sdtaue&#39;</span><span class="p">,</span> <span class="s1">&#39;sdmutau&#39;</span><span class="p">,</span> <span class="s1">&#39;sdtaumu&#39;</span><span class="p">],</span>
+
+<span class="s1">&#39;Vb_c&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;cuemu&#39;</span><span class="p">,</span> <span class="s1">&#39;cumue&#39;</span><span class="p">,</span> <span class="s1">&#39;cuetau&#39;</span><span class="p">,</span> <span class="s1">&#39;cutaue&#39;</span><span class="p">,</span> <span class="s1">&#39;cumutau&#39;</span><span class="p">,</span> <span class="s1">&#39;cutaumu&#39;</span><span class="p">],</span>
+
+<span class="s1">&#39;IVe&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;muemutau&#39;</span><span class="p">,</span> <span class="s1">&#39;etauemu&#39;</span><span class="p">,</span> <span class="s1">&#39;tauetaumu&#39;</span><span class="p">],</span>
+
+<span class="s1">&#39;inv&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;sbnunu&#39;</span><span class="p">,</span> <span class="s1">&#39;dbnunu&#39;</span><span class="p">,</span> <span class="s1">&#39;sdnunu&#39;</span><span class="p">,</span> <span class="s1">&#39;cununu&#39;</span><span class="p">,</span> <span class="s1">&#39;nunumue&#39;</span><span class="p">,</span> <span class="s1">&#39;nunumutau&#39;</span><span class="p">,</span> <span class="s1">&#39;nunutaue&#39;</span><span class="p">,</span> <span class="s1">&#39;nunununu&#39;</span><span class="p">],</span>
+
+ <span class="s1">&#39;cu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;cu&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;db&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;db&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sb&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;sb&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sd&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;sd&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;mue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;mue&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;mutau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;mutau&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;taue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;taue&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dF0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;dF=0&#39;</span><span class="p">],</span>
+<span class="p">}</span>
+
+
+<span class="n">sectors</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">ss</span> <span class="ow">in</span> <span class="n">classes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ss</span><span class="p">:</span>
+        <span class="n">sectors</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+
+
+<span class="n">coeffs</span> <span class="o">=</span> <span class="p">{</span>
+ <span class="s1">&#39;cbenu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3132&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3132&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3132&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3132&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3132&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cbmunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3232&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3232&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3232&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cbtaunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3332&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3332&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3332&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cdenu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3112&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3112&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cdmunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3212&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3212&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cdtaunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3312&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;csenu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3122&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3122&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;csmunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3222&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3222&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cstaunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3322&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1udRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2133&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1uuRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1uuRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1uuRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1uuRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2133&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8uuRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8uuRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8uuRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8uuRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_3321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_3321&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_3321&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1uuLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1uuLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1uuLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1uuLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8uuLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8uuLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8uuLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8uuLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuLL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuLL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;uG_12&#39;</span><span class="p">,</span>   <span class="s1">&#39;uG_21&#39;</span><span class="p">,</span>   <span class="s1">&#39;ugamma_12&#39;</span><span class="p">,</span>   <span class="s1">&#39;ugamma_21&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cucu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1uuRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1uuRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8uuRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8uuRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1uuLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8uuLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuLL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuRR_1212&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cuemu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SeuRL_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1221&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cuetau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SeuRL_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_3112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_3112&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_3112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1231&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cumue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SeuRL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1212&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cumutau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SeuRL_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_3212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_3212&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_3212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1232&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cununu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;VnuuLL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_3312&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cutaue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SeuRL_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_3121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_3121&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_3121&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1213&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;cutaumu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SeuRL_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_3221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_3221&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_3221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1223&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dF=0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;G&#39;</span><span class="p">,</span>   <span class="s1">&#39;Gtilde&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1uuRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1uuRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1uuRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1uuRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8uuRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8uuRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8uuRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8uuRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1uuLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1uuLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1uuLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1uuLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1uuLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8uuLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8uuLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8uuLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8uuLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8uuLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_3333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLL_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnuuLR_3322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1133&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_2233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuLL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuLL_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuLL_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuLL_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VuuRR_2222&#39;</span><span class="p">,</span>   <span class="s1">&#39;dG_11&#39;</span><span class="p">,</span>   <span class="s1">&#39;dG_22&#39;</span><span class="p">,</span>   <span class="s1">&#39;dG_33&#39;</span><span class="p">,</span>   <span class="s1">&#39;dgamma_11&#39;</span><span class="p">,</span>   <span class="s1">&#39;dgamma_22&#39;</span><span class="p">,</span>   <span class="s1">&#39;dgamma_33&#39;</span><span class="p">,</span>   <span class="s1">&#39;egamma_11&#39;</span><span class="p">,</span>   <span class="s1">&#39;egamma_22&#39;</span><span class="p">,</span>   <span class="s1">&#39;egamma_33&#39;</span><span class="p">,</span>   <span class="s1">&#39;uG_11&#39;</span><span class="p">,</span>   <span class="s1">&#39;uG_22&#39;</span><span class="p">,</span>   <span class="s1">&#39;ugamma_11&#39;</span><span class="p">,</span>   <span class="s1">&#39;ugamma_22&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;db&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1ddRR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_3133&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_3133&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3313&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3331&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3313&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3331&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3313&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3331&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_3313&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_3313&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_3313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_3313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_3313&#39;</span><span class="p">,</span>   <span class="s1">&#39;dG_13&#39;</span><span class="p">,</span>   <span class="s1">&#39;dG_31&#39;</span><span class="p">,</span>   <span class="s1">&#39;dgamma_13&#39;</span><span class="p">,</span>   <span class="s1">&#39;dgamma_31&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dbcu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1udRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2113&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2113&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2311&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dbdb&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1ddRR_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_3131&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_3131&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1313&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dbds&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1ddRR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1213&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dbemu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1213&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dbetau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3131&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3131&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3131&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1313&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dbmue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2113&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2113&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1231&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dbmutau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_2313&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3231&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2313&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3231&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2313&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2313&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dbnunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;VnudLL_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_3313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_3313&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dbsb&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1ddRR_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_3132&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_3132&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2313&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1323&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dbtaue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3113&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3113&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1331&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dbtaumu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3213&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3213&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2331&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;dbuc&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1udRR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2131&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;etauemu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SeeRR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1213&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;mue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2133&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2133&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2133&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2133&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;egamma_12&#39;</span><span class="p">,</span>   <span class="s1">&#39;egamma_21&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;muemue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SeeRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1212&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;muemutau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SeeRR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1232&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;mutau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3233&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3233&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_3233&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_3211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_3222&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_3211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_3222&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3211&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3222&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3233&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_3211&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_3222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_3323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_3323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;egamma_23&#39;</span><span class="p">,</span>   <span class="s1">&#39;egamma_32&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;nunumue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;VnueLL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_3312&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;nunumutau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;VnueLL_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_3323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_3323&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;nunununu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;VnunuLL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnunuLL_2333&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;nunutaue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;VnueLL_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLL_3313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueLR_3313&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sb&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1ddRR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_3233&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_3233&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3323&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3332&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3323&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3332&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1132&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3323&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3332&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_3323&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_3323&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2232&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_3323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_3323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_3323&#39;</span><span class="p">,</span>   <span class="s1">&#39;dG_23&#39;</span><span class="p">,</span>   <span class="s1">&#39;dG_32&#39;</span><span class="p">,</span>   <span class="s1">&#39;dgamma_23&#39;</span><span class="p">,</span>   <span class="s1">&#39;dgamma_32&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sbcu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1udRR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2123&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2123&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2321&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sbemu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1223&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sbetau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3132&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3132&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3132&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1323&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sbmue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2123&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2123&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1232&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sbmutau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3232&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3232&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2323&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sbnunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;VnudLL_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_3323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_3323&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sbsb&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1ddRR_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_3232&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_3232&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_2323&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sbsd&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1ddRR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2123&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2123&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1232&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sbtaue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3123&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3123&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3123&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1332&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sbtaumu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3223&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3223&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2332&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sbuc&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1udRR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2231&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sd&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1ddRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2133&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2133&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3321&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3321&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1332&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1222&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1233&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;dG_12&#39;</span><span class="p">,</span>   <span class="s1">&#39;dG_21&#39;</span><span class="p">,</span>   <span class="s1">&#39;dgamma_12&#39;</span><span class="p">,</span>   <span class="s1">&#39;dgamma_21&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sdcu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1udRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2121&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sdemu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1221&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sdetau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3112&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3112&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1321&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sdmue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1212&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sdmutau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3212&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3212&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2321&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sdnunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;VnudLL_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLL_3312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1112&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnudLR_3312&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sdsd&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1ddRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1ddRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8ddRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1ddLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8ddLR_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddLL_1212&#39;</span><span class="p">,</span>   <span class="s1">&#39;VddRR_1212&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sdtaue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3121&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3121&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1312&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sdtaumu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3221&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_2312&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;sduc&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;S1udRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udRR_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S1udduRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udRR_2112&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;S8udduRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1duLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLL_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V1udduLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8duLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLL_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_1122&#39;</span><span class="p">,</span>   <span class="s1">&#39;V8udduLR_2211&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;taue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SedRL_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRL_3133&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SedRR_3133&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2132&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_3133&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_3111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRL_3122&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_3111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeuRR_3122&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3111&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3122&#39;</span><span class="p">,</span>   <span class="s1">&#39;TedRR_3133&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_3111&#39;</span><span class="p">,</span>   <span class="s1">&#39;TeuRR_3122&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VdeLR_3313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLL_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedLR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VedRR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2312&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_3313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1223&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1333&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLL_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuLR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeuRR_1322&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_1113&#39;</span><span class="p">,</span>   <span class="s1">&#39;VueLR_2213&#39;</span><span class="p">,</span>   <span class="s1">&#39;egamma_13&#39;</span><span class="p">,</span>   <span class="s1">&#39;egamma_31&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;tauetaue&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SeeRR_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_3131&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1313&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;tauetaumu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SeeRR_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_3132&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_1323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2313&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_1323&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;taumutaumu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SeeRR_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;SeeRR_3232&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLL_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeLR_2323&#39;</span><span class="p">,</span>   <span class="s1">&#39;VeeRR_2323&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;ubenu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3131&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3131&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3131&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3131&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1131&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2131&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3131&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;ubmunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3231&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3231&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2231&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3231&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;ubtaunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3331&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3331&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2331&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3331&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;udenu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3111&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2111&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3111&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;udmunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3211&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2211&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3211&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;udtaunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2311&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3311&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;usenu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3121&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3121&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3121&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1121&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2121&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3121&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;usmunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3221&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2221&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3221&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;ustaunu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SnueduRL_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRL_3321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;SnueduRR_3321&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;TnueduRR_3321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLL_3321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_1321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_2321&#39;</span><span class="p">,</span>   <span class="s1">&#39;VnueduLR_3321&#39;</span><span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+
+  </div>
+
+  </header>
+
+  <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="wilson.run.wet.definitions.c" class="name">var <span class="ident">c</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="wilson.run.wet.definitions.classes" class="name">var <span class="ident">classes</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="wilson.run.wet.definitions.coeffs" class="name">var <span class="ident">coeffs</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="wilson.run.wet.definitions.s" class="name">var <span class="ident">s</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="wilson.run.wet.definitions.sectors" class="name">var <span class="ident">sectors</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="wilson.run.wet.definitions.ss" class="name">var <span class="ident">ss</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+
+
+
+  </section>
+
+    </article>
+  <div class="clear"> </div>
+  <footer id="footer">
+    <p>
+      Documentation generated by
+      <a href="https://github.com/BurntSushi/pdoc">pdoc 0.3.2</a>
+    </p>
+
+    <p>pdoc is in the public domain with the
+      <a href="http://unlicense.org">UNLICENSE</a></p>
+
+    <p>Design by <a href="http://nadh.in">Kailash Nadh</a></p>
+  </footer>
+</div>
+
+    <script>
+      renderMathInElement(document.body, options={delimiters:[
+  {left: "$$", right: "$$", display: true},
+  {left: "\\[", right: "\\]", display: true},
+  {left: "\\(", right: "\\)", display: false},
+  {left: "$", right: "$", display: false}
+]});
+    </script>
+    <script type="text/javascript">
+    $("script[type='math/tex; mode=display']").replaceWith(
+      function(){
+        var tex = $(this).text();
+        return "<span class=\"katex-display\">" +
+               katex.renderToString("\\displaystyle "+tex) +
+               "</span>";
+    });
+    </script>
+
+</body>
+</html>

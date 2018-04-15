@@ -1,0 +1,12 @@
+# Site settings
+title: wilson
+email:
+description: A Python package for running, matching, and basis translating new physics Wilson coefficients
+url: "https://wilson-eft.github.io"
+
+highlighter: rouge
+permalink: pretty
+paginate: 5
+exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
+
+gems: [jekyll-paginate, jekyll-feed]

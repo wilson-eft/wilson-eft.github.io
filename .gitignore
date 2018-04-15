@@ -1,0 +1,13 @@
+.directory
+.ropeproject
+Gemfile
+Gemfile.lock
+.DS_Store
+node_modules
+_site
+
+feed.xml
+
+.bundle
+.jekyll-metadata
+package.json
