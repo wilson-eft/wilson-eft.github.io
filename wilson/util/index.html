@@ -860,8 +860,13 @@ table {
   </style>
 
   <style type="text/css">
-  .codehilite .hll { background-color: #ffffcc }
-.codehilite  { background: #f8f8f8; }
+  pre { line-height: 125%; margin: 0; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
 .codehilite .c { color: #408080; font-style: italic } /* Comment */
 .codehilite .err { border: 1px solid #FF0000 } /* Error */
 .codehilite .k { color: #008000; font-weight: bold } /* Keyword */
@@ -1050,15 +1055,26 @@ table {
   <div id="sidebar">
     <h1>Index</h1>
     <ul id="index">
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#wilson.util.smeftutil">smeftutil</a></li>
+    <li class="mono"><a href="#wilson.util.wetutil">wetutil</a></li>
+  </ul>
+
+    </li>
 
 
 
     <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
+        <li class="mono"><a href="common.m.html">wilson.util.common</a></li>
         <li class="mono"><a href="qcd.m.html">wilson.util.qcd</a></li>
-        <li class="mono"><a href="smeftutil.m.html">wilson.util.smeftutil</a></li>
+        <li class="mono"><a href="smeft_warsaw.m.html">wilson.util.smeft_warsaw</a></li>
         <li class="mono"><a href="test_qcd.m.html">wilson.util.test_qcd</a></li>
         <li class="mono"><a href="test_smeftutil.m.html">wilson.util.test_smeftutil</a></li>
+        <li class="mono"><a href="test_wetutil.m.html">wilson.util.test_wetutil</a></li>
+        <li class="mono"><a href="wet_jms.m.html">wilson.util.wet_jms</a></li>
       </ul>
     </li>
     </ul>
@@ -1078,6 +1094,43 @@ table {
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.util', this);">Show source &equiv;</a></p>
   <div id="source-wilson.util" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;Utility modules for wilson.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">wilson.util.common</span> <span class="kn">import</span> <span class="n">EFTutil</span> <span class="k">as</span> <span class="n">EFTutil</span>
+
+<span class="n">smeftutil</span> <span class="o">=</span> <span class="n">EFTutil</span><span class="p">(</span>
+    <span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span>
+    <span class="n">dim4_keys_shape</span> <span class="o">=</span> <span class="p">{</span>
+       <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+       <span class="s1">&#39;gp&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+       <span class="s1">&#39;gs&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+       <span class="s1">&#39;Lambda&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+       <span class="s1">&#39;m2&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+       <span class="s1">&#39;Gu&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+       <span class="s1">&#39;Gd&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+       <span class="s1">&#39;Ge&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="p">},</span>
+    <span class="n">dim4_symm_keys</span> <span class="o">=</span>  <span class="p">{</span>
+        <span class="mi">0</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;gp&#39;</span><span class="p">,</span> <span class="s1">&#39;gs&#39;</span><span class="p">,</span> <span class="s1">&#39;Lambda&#39;</span><span class="p">,</span> <span class="s1">&#39;m2&#39;</span><span class="p">],</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Gu&#39;</span><span class="p">,</span> <span class="s1">&#39;Gd&#39;</span><span class="p">,</span> <span class="s1">&#39;Ge&#39;</span><span class="p">],</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+<span class="n">wetutil</span> <span class="o">=</span> <span class="n">EFTutil</span><span class="p">(</span>
+    <span class="s1">&#39;WET&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;JMS&#39;</span><span class="p">,</span>
+    <span class="n">dim4_keys_shape</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;gs&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;Md&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="s1">&#39;Mu&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="s1">&#39;Me&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="s1">&#39;Mnu&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="p">},</span>
+    <span class="n">dim4_symm_keys</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">0</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;gs&#39;</span><span class="p">],</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Md&#39;</span><span class="p">,</span> <span class="s1">&#39;Mu&#39;</span><span class="p">,</span> <span class="s1">&#39;Me&#39;</span><span class="p">,</span> <span class="s1">&#39;Mnu&#39;</span><span class="p">],</span>
+    <span class="p">},</span>
+<span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1085,10 +1138,33 @@ table {
   </header>
 
   <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="wilson.util.smeftutil" class="name">var <span class="ident">smeftutil</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="wilson.util.wetutil" class="name">var <span class="ident">wetutil</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
 
 
 
     <h2 class="section-title" id="header-submodules">Sub-modules</h2>
+      <div class="item">
+      <p class="name"><a href="common.m.html">wilson.util.common</a></p>
+      
+  
+
+      </div>
       <div class="item">
       <p class="name"><a href="qcd.m.html">wilson.util.qcd</a></p>
       
@@ -1097,7 +1173,7 @@ table {
 
       </div>
       <div class="item">
-      <p class="name"><a href="smeftutil.m.html">wilson.util.smeftutil</a></p>
+      <p class="name"><a href="smeft_warsaw.m.html">wilson.util.smeft_warsaw</a></p>
       
   
     <div class="desc"><p>Utility functions and dictionaries useful for the manipulation of SMEFT Wilson coefficients.</p></div>
@@ -1113,6 +1189,19 @@ table {
       <p class="name"><a href="test_smeftutil.m.html">wilson.util.test_smeftutil</a></p>
       
   
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="test_wetutil.m.html">wilson.util.test_wetutil</a></p>
+      
+  
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="wet_jms.m.html">wilson.util.wet_jms</a></p>
+      
+  
+    <div class="desc"><p>Utility functions and dictionaries useful for the manipulation of WET Wilson coefficients.</p></div>
 
       </div>
   </section>

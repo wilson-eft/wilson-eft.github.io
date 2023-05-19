@@ -860,8 +860,13 @@ table {
   </style>
 
   <style type="text/css">
-  .codehilite .hll { background-color: #ffffcc }
-.codehilite  { background: #f8f8f8; }
+  pre { line-height: 125%; margin: 0; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
 .codehilite .c { color: #408080; font-style: italic } /* Comment */
 .codehilite .err { border: 1px solid #FF0000 } /* Error */
 .codehilite .k { color: #008000; font-weight: bold } /* Keyword */
@@ -1061,13 +1066,11 @@ table {
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#wilson.translate.smeft.arrays2wcxf">arrays2wcxf</a></li>
     <li class="mono"><a href="#wilson.translate.smeft.smeft_fromarray">smeft_fromarray</a></li>
     <li class="mono"><a href="#wilson.translate.smeft.smeft_toarray">smeft_toarray</a></li>
     <li class="mono"><a href="#wilson.translate.smeft.warsaw_to_warsaw_up">warsaw_to_warsaw_up</a></li>
     <li class="mono"><a href="#wilson.translate.smeft.warsaw_to_warsawmass">warsaw_to_warsawmass</a></li>
     <li class="mono"><a href="#wilson.translate.smeft.warsaw_up_to_warsaw">warsaw_up_to_warsaw</a></li>
-    <li class="mono"><a href="#wilson.translate.smeft.wcxf2arrays">wcxf2arrays</a></li>
   </ul>
 
     </li>
@@ -1089,50 +1092,13 @@ table {
   
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.smeft', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.smeft" class="source">
-    <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">wcxf</span>
+    <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">wilson</span> <span class="kn">import</span> <span class="n">wcxf</span>
 <span class="kn">from</span> <span class="nn">wilson.parameters</span> <span class="kn">import</span> <span class="n">p</span> <span class="k">as</span> <span class="n">default_parameters</span>
 <span class="kn">import</span> <span class="nn">ckmutil.ckm</span>
 <span class="kn">import</span> <span class="nn">ckmutil.diag</span>
-<span class="kn">from</span> <span class="nn">wilson.util</span> <span class="kn">import</span> <span class="n">smeftutil</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">wilson.util</span> <span class="kn">import</span> <span class="n">smeftutil</span><span class="p">,</span> <span class="n">smeft_warsaw</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-
-
-<span class="k">def</span> <span class="nf">arrays2wcxf</span><span class="p">(</span><span class="n">C</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert a dictionary with Wilson coefficient names as keys and</span>
-<span class="sd">    numbers or numpy arrays as values to a dictionary with a Wilson coefficient</span>
-<span class="sd">    name followed by underscore and numeric indices as keys and numbers as</span>
-<span class="sd">    values. This is needed for the output in WCxf format.&quot;&quot;&quot;</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="p">():</span>
-            <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">indices</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ndim</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ind</span><span class="p">:</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="p">])</span>
-                <span class="n">d</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
-    <span class="k">return</span> <span class="n">d</span>
-
-
-<span class="k">def</span> <span class="nf">wcxf2arrays</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert a dictionary dictionary with a Wilson coefficient</span>
-<span class="sd">    name followed by underscore and numeric indices as keys and numbers as</span>
-<span class="sd">    values to a dictionary with Wilson coefficient names as keys and</span>
-<span class="sd">    numbers or numpy arrays as values. This is needed for the parsing</span>
-<span class="sd">    of input in WCxf format.&quot;&quot;&quot;</span>
-    <span class="n">C</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">C_keys_shape</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">C</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ind</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">C</span><span class="p">:</span>
-                <span class="n">C</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-            <span class="n">C</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="nb">tuple</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ind</span><span class="p">])]</span> <span class="o">=</span> <span class="n">v</span>
-    <span class="k">return</span> <span class="n">C</span>
 
 
 <span class="k">def</span> <span class="nf">smeft_toarray</span><span class="p">(</span><span class="n">wc_name</span><span class="p">,</span> <span class="n">wc_dict</span><span class="p">):</span>
@@ -1160,7 +1126,7 @@ table {
     <span class="k">return</span> <span class="n">wc_dict</span>
 
 
-<span class="k">def</span> <span class="nf">warsaw_to_warsawmass</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">warsaw_to_warsawmass</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Translate from the Warsaw basis to the &#39;Warsaw mass&#39; basis.</span>
 
 <span class="sd">    Parameters used:</span>
@@ -1169,7 +1135,7 @@ table {
 <span class="sd">      matrices).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">default_parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># if parameters are passed in, overwrite the default values</span>
         <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
     <span class="c1"># start out with a 1:1 copy</span>
@@ -1178,9 +1144,9 @@ table {
     <span class="n">C_rotate_u</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;uphi&#39;</span><span class="p">,</span> <span class="s1">&#39;uG&#39;</span><span class="p">,</span> <span class="s1">&#39;uW&#39;</span><span class="p">,</span> <span class="s1">&#39;uB&#39;</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">C_rotate_u</span><span class="p">:</span>
         <span class="n">_array</span> <span class="o">=</span> <span class="n">smeft_toarray</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
-        <span class="n">V</span> <span class="o">=</span> <span class="n">ckmutil</span><span class="o">.</span><span class="n">ckm</span><span class="o">.</span><span class="n">ckm_tree</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vus&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vub&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vcb&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;gamma&quot;</span><span class="p">])</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="n">ckmutil</span><span class="o">.</span><span class="n">ckm</span><span class="o">.</span><span class="n">ckm_tree</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vus&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vub&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vcb&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">])</span>
         <span class="n">UuL</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
-        <span class="n">_array</span> <span class="o">=</span> <span class="n">UuL</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">_array</span>
+        <span class="n">_array</span> <span class="o">=</span> <span class="n">UuL</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">_array</span>
         <span class="n">_dict</span> <span class="o">=</span> <span class="n">smeft_fromarray</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">_array</span><span class="p">)</span>
         <span class="n">C_out</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_dict</span><span class="p">)</span>
     <span class="c1"># diagonalize dimension-5 Weinberg operator</span>
@@ -1191,7 +1157,7 @@ table {
     <span class="k">return</span> <span class="n">C_out</span>
 
 
-<span class="k">def</span> <span class="nf">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Translate from the Warsaw basis to the &#39;Warsaw mass&#39; basis.</span>
 
 <span class="sd">    Parameters used:</span>
@@ -1199,23 +1165,20 @@ table {
 <span class="sd">      as the mismatch between left-handed quark mass matrix diagonalization</span>
 <span class="sd">      matrices).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">C_in</span> <span class="o">=</span> <span class="n">wcxf2arrays</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
-    <span class="n">C_in</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">symmetrize</span><span class="p">(</span><span class="n">C_in</span><span class="p">)</span>
+    <span class="n">C_in</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">wcxf2arrays_symmetrized</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">default_parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># if parameters are passed in, overwrite the default values</span>
         <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
     <span class="n">Uu</span> <span class="o">=</span> <span class="n">Ud</span> <span class="o">=</span> <span class="n">Ul</span> <span class="o">=</span> <span class="n">Ue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">V</span> <span class="o">=</span> <span class="n">ckmutil</span><span class="o">.</span><span class="n">ckm</span><span class="o">.</span><span class="n">ckm_tree</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vus&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vub&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vcb&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;gamma&quot;</span><span class="p">])</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">ckmutil</span><span class="o">.</span><span class="n">ckm</span><span class="o">.</span><span class="n">ckm_tree</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vus&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vub&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vcb&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">])</span>
     <span class="n">Uq</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
-    <span class="n">C_out</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">flavor_rotation</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">Uq</span><span class="p">,</span> <span class="n">Uu</span><span class="p">,</span> <span class="n">Ud</span><span class="p">,</span> <span class="n">Ul</span><span class="p">,</span> <span class="n">Ue</span><span class="p">)</span>
-    <span class="n">C_out</span> <span class="o">=</span> <span class="n">arrays2wcxf</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
-    <span class="n">warsawup</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">]</span>
-    <span class="n">allkeys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">warsawup</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>  <span class="c1"># to speed up lookup</span>
-    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C_out</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">allkeys</span><span class="p">}</span>
+    <span class="n">C_out</span> <span class="o">=</span> <span class="n">smeft_warsaw</span><span class="o">.</span><span class="n">flavor_rotation</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">Uq</span><span class="p">,</span> <span class="n">Uu</span><span class="p">,</span> <span class="n">Ud</span><span class="p">,</span> <span class="n">Ul</span><span class="p">,</span> <span class="n">Ue</span><span class="p">)</span>
+    <span class="n">C_out</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">arrays2wcxf_nonred</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">C_out</span>
 
 
-<span class="k">def</span> <span class="nf">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Translate from the &#39;Warsaw up&#39; basis to the Warsaw basis.</span>
 
 <span class="sd">    Parameters used:</span>
@@ -1223,20 +1186,17 @@ table {
 <span class="sd">      as the mismatch between left-handed quark mass matrix diagonalization</span>
 <span class="sd">      matrices).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">C_in</span> <span class="o">=</span> <span class="n">wcxf2arrays</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
-    <span class="n">C_in</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">symmetrize</span><span class="p">(</span><span class="n">C_in</span><span class="p">)</span>
+    <span class="n">C_in</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">wcxf2arrays_symmetrized</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">default_parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># if parameters are passed in, overwrite the default values</span>
         <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
     <span class="n">Uu</span> <span class="o">=</span> <span class="n">Ud</span> <span class="o">=</span> <span class="n">Ul</span> <span class="o">=</span> <span class="n">Ue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">V</span> <span class="o">=</span> <span class="n">ckmutil</span><span class="o">.</span><span class="n">ckm</span><span class="o">.</span><span class="n">ckm_tree</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vus&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vub&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vcb&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;gamma&quot;</span><span class="p">])</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">ckmutil</span><span class="o">.</span><span class="n">ckm</span><span class="o">.</span><span class="n">ckm_tree</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vus&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vub&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vcb&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">])</span>
     <span class="n">Uq</span> <span class="o">=</span> <span class="n">V</span>
-    <span class="n">C_out</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">flavor_rotation</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">Uq</span><span class="p">,</span> <span class="n">Uu</span><span class="p">,</span> <span class="n">Ud</span><span class="p">,</span> <span class="n">Ul</span><span class="p">,</span> <span class="n">Ue</span><span class="p">)</span>
-    <span class="n">C_out</span> <span class="o">=</span> <span class="n">arrays2wcxf</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
-    <span class="n">warsaw</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">]</span>
-    <span class="n">all_wcs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">warsaw</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>  <span class="c1"># to speed up lookup</span>
-    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C_out</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_wcs</span><span class="p">}</span>
+    <span class="n">C_out</span> <span class="o">=</span> <span class="n">smeft_warsaw</span><span class="o">.</span><span class="n">flavor_rotation</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">Uq</span><span class="p">,</span> <span class="n">Uu</span><span class="p">,</span> <span class="n">Ud</span><span class="p">,</span> <span class="n">Ul</span><span class="p">,</span> <span class="n">Ue</span><span class="p">)</span>
+    <span class="n">C_out</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">arrays2wcxf_nonred</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">C_out</span>
 </pre></div>
 
   </div>
@@ -1255,44 +1215,6 @@ table {
       </div>
 
     <h2 class="section-title" id="header-functions">Functions</h2>
-      
-  <div class="item">
-    <div class="name def" id="wilson.translate.smeft.arrays2wcxf">
-    <p>def <span class="ident">arrays2wcxf</span>(</p><p>C)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Convert a dictionary with Wilson coefficient names as keys and
-numbers or numpy arrays as values to a dictionary with a Wilson coefficient
-name followed by underscore and numeric indices as keys and numbers as
-values. This is needed for the output in WCxf format.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.smeft.arrays2wcxf', this);">Show source &equiv;</a></p>
-  <div id="source-wilson.translate.smeft.arrays2wcxf" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">arrays2wcxf</span><span class="p">(</span><span class="n">C</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert a dictionary with Wilson coefficient names as keys and</span>
-<span class="sd">    numbers or numpy arrays as values to a dictionary with a Wilson coefficient</span>
-<span class="sd">    name followed by underscore and numeric indices as keys and numbers as</span>
-<span class="sd">    values. This is needed for the output in WCxf format.&quot;&quot;&quot;</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="p">():</span>
-            <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">indices</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">ndim</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ind</span><span class="p">:</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="p">])</span>
-                <span class="n">d</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
-    <span class="k">return</span> <span class="n">d</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
       
   <div class="item">
     <div class="name def" id="wilson.translate.smeft.smeft_fromarray">
@@ -1358,7 +1280,7 @@ elements.</p></div>
       
   <div class="item">
     <div class="name def" id="wilson.translate.smeft.warsaw_to_warsaw_up">
-    <p>def <span class="ident">warsaw_to_warsaw_up</span>(</p><p>C, parameters=None)</p>
+    <p>def <span class="ident">warsaw_to_warsaw_up</span>(</p><p>C, parameters=None, sectors=None)</p>
     </div>
     
 
@@ -1372,7 +1294,7 @@ elements.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.smeft.warsaw_to_warsaw_up', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.smeft.warsaw_to_warsaw_up" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Translate from the Warsaw basis to the &#39;Warsaw mass&#39; basis.</span>
 
 <span class="sd">    Parameters used:</span>
@@ -1380,20 +1302,17 @@ elements.</p></div>
 <span class="sd">      as the mismatch between left-handed quark mass matrix diagonalization</span>
 <span class="sd">      matrices).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">C_in</span> <span class="o">=</span> <span class="n">wcxf2arrays</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
-    <span class="n">C_in</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">symmetrize</span><span class="p">(</span><span class="n">C_in</span><span class="p">)</span>
+    <span class="n">C_in</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">wcxf2arrays_symmetrized</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">default_parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># if parameters are passed in, overwrite the default values</span>
         <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
     <span class="n">Uu</span> <span class="o">=</span> <span class="n">Ud</span> <span class="o">=</span> <span class="n">Ul</span> <span class="o">=</span> <span class="n">Ue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">V</span> <span class="o">=</span> <span class="n">ckmutil</span><span class="o">.</span><span class="n">ckm</span><span class="o">.</span><span class="n">ckm_tree</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vus&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vub&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vcb&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;gamma&quot;</span><span class="p">])</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">ckmutil</span><span class="o">.</span><span class="n">ckm</span><span class="o">.</span><span class="n">ckm_tree</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vus&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vub&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vcb&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">])</span>
     <span class="n">Uq</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
-    <span class="n">C_out</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">flavor_rotation</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">Uq</span><span class="p">,</span> <span class="n">Uu</span><span class="p">,</span> <span class="n">Ud</span><span class="p">,</span> <span class="n">Ul</span><span class="p">,</span> <span class="n">Ue</span><span class="p">)</span>
-    <span class="n">C_out</span> <span class="o">=</span> <span class="n">arrays2wcxf</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
-    <span class="n">warsawup</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">]</span>
-    <span class="n">allkeys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">warsawup</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>  <span class="c1"># to speed up lookup</span>
-    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C_out</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">allkeys</span><span class="p">}</span>
+    <span class="n">C_out</span> <span class="o">=</span> <span class="n">smeft_warsaw</span><span class="o">.</span><span class="n">flavor_rotation</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">Uq</span><span class="p">,</span> <span class="n">Uu</span><span class="p">,</span> <span class="n">Ud</span><span class="p">,</span> <span class="n">Ul</span><span class="p">,</span> <span class="n">Ue</span><span class="p">)</span>
+    <span class="n">C_out</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">arrays2wcxf_nonred</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">C_out</span>
 </pre></div>
 
   </div>
@@ -1404,7 +1323,7 @@ elements.</p></div>
       
   <div class="item">
     <div class="name def" id="wilson.translate.smeft.warsaw_to_warsawmass">
-    <p>def <span class="ident">warsaw_to_warsawmass</span>(</p><p>C, parameters=None)</p>
+    <p>def <span class="ident">warsaw_to_warsawmass</span>(</p><p>C, parameters=None, sectors=None)</p>
     </div>
     
 
@@ -1418,7 +1337,7 @@ elements.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.smeft.warsaw_to_warsawmass', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.smeft.warsaw_to_warsawmass" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">warsaw_to_warsawmass</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">warsaw_to_warsawmass</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Translate from the Warsaw basis to the &#39;Warsaw mass&#39; basis.</span>
 
 <span class="sd">    Parameters used:</span>
@@ -1427,7 +1346,7 @@ elements.</p></div>
 <span class="sd">      matrices).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">default_parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># if parameters are passed in, overwrite the default values</span>
         <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
     <span class="c1"># start out with a 1:1 copy</span>
@@ -1436,9 +1355,9 @@ elements.</p></div>
     <span class="n">C_rotate_u</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;uphi&#39;</span><span class="p">,</span> <span class="s1">&#39;uG&#39;</span><span class="p">,</span> <span class="s1">&#39;uW&#39;</span><span class="p">,</span> <span class="s1">&#39;uB&#39;</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">C_rotate_u</span><span class="p">:</span>
         <span class="n">_array</span> <span class="o">=</span> <span class="n">smeft_toarray</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
-        <span class="n">V</span> <span class="o">=</span> <span class="n">ckmutil</span><span class="o">.</span><span class="n">ckm</span><span class="o">.</span><span class="n">ckm_tree</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vus&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vub&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vcb&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;gamma&quot;</span><span class="p">])</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="n">ckmutil</span><span class="o">.</span><span class="n">ckm</span><span class="o">.</span><span class="n">ckm_tree</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vus&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vub&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vcb&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">])</span>
         <span class="n">UuL</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
-        <span class="n">_array</span> <span class="o">=</span> <span class="n">UuL</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">_array</span>
+        <span class="n">_array</span> <span class="o">=</span> <span class="n">UuL</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">_array</span>
         <span class="n">_dict</span> <span class="o">=</span> <span class="n">smeft_fromarray</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">_array</span><span class="p">)</span>
         <span class="n">C_out</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_dict</span><span class="p">)</span>
     <span class="c1"># diagonalize dimension-5 Weinberg operator</span>
@@ -1457,7 +1376,7 @@ elements.</p></div>
       
   <div class="item">
     <div class="name def" id="wilson.translate.smeft.warsaw_up_to_warsaw">
-    <p>def <span class="ident">warsaw_up_to_warsaw</span>(</p><p>C, parameters=None)</p>
+    <p>def <span class="ident">warsaw_up_to_warsaw</span>(</p><p>C, parameters=None, sectors=None)</p>
     </div>
     
 
@@ -1471,7 +1390,7 @@ elements.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.smeft.warsaw_up_to_warsaw', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.smeft.warsaw_up_to_warsaw" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Translate from the &#39;Warsaw up&#39; basis to the Warsaw basis.</span>
 
 <span class="sd">    Parameters used:</span>
@@ -1479,62 +1398,17 @@ elements.</p></div>
 <span class="sd">      as the mismatch between left-handed quark mass matrix diagonalization</span>
 <span class="sd">      matrices).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">C_in</span> <span class="o">=</span> <span class="n">wcxf2arrays</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
-    <span class="n">C_in</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">symmetrize</span><span class="p">(</span><span class="n">C_in</span><span class="p">)</span>
+    <span class="n">C_in</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">wcxf2arrays_symmetrized</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">default_parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># if parameters are passed in, overwrite the default values</span>
         <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
     <span class="n">Uu</span> <span class="o">=</span> <span class="n">Ud</span> <span class="o">=</span> <span class="n">Ul</span> <span class="o">=</span> <span class="n">Ue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">V</span> <span class="o">=</span> <span class="n">ckmutil</span><span class="o">.</span><span class="n">ckm</span><span class="o">.</span><span class="n">ckm_tree</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vus&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vub&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vcb&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;gamma&quot;</span><span class="p">])</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">ckmutil</span><span class="o">.</span><span class="n">ckm</span><span class="o">.</span><span class="n">ckm_tree</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vus&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vub&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;Vcb&quot;</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">])</span>
     <span class="n">Uq</span> <span class="o">=</span> <span class="n">V</span>
-    <span class="n">C_out</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">flavor_rotation</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">Uq</span><span class="p">,</span> <span class="n">Uu</span><span class="p">,</span> <span class="n">Ud</span><span class="p">,</span> <span class="n">Ul</span><span class="p">,</span> <span class="n">Ue</span><span class="p">)</span>
-    <span class="n">C_out</span> <span class="o">=</span> <span class="n">arrays2wcxf</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
-    <span class="n">warsaw</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">]</span>
-    <span class="n">all_wcs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">warsaw</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>  <span class="c1"># to speed up lookup</span>
-    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C_out</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_wcs</span><span class="p">}</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-      
-  <div class="item">
-    <div class="name def" id="wilson.translate.smeft.wcxf2arrays">
-    <p>def <span class="ident">wcxf2arrays</span>(</p><p>d)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Convert a dictionary dictionary with a Wilson coefficient
-name followed by underscore and numeric indices as keys and numbers as
-values to a dictionary with Wilson coefficient names as keys and
-numbers or numpy arrays as values. This is needed for the parsing
-of input in WCxf format.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.smeft.wcxf2arrays', this);">Show source &equiv;</a></p>
-  <div id="source-wilson.translate.smeft.wcxf2arrays" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">wcxf2arrays</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert a dictionary dictionary with a Wilson coefficient</span>
-<span class="sd">    name followed by underscore and numeric indices as keys and numbers as</span>
-<span class="sd">    values to a dictionary with Wilson coefficient names as keys and</span>
-<span class="sd">    numbers or numpy arrays as values. This is needed for the parsing</span>
-<span class="sd">    of input in WCxf format.&quot;&quot;&quot;</span>
-    <span class="n">C</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">C_keys_shape</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">C</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ind</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">C</span><span class="p">:</span>
-                <span class="n">C</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-            <span class="n">C</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="nb">tuple</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ind</span><span class="p">])]</span> <span class="o">=</span> <span class="n">v</span>
-    <span class="k">return</span> <span class="n">C</span>
+    <span class="n">C_out</span> <span class="o">=</span> <span class="n">smeft_warsaw</span><span class="o">.</span><span class="n">flavor_rotation</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">Uq</span><span class="p">,</span> <span class="n">Uu</span><span class="p">,</span> <span class="n">Ud</span><span class="p">,</span> <span class="n">Ul</span><span class="p">,</span> <span class="n">Ue</span><span class="p">)</span>
+    <span class="n">C_out</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">arrays2wcxf_nonred</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">C_out</span>
 </pre></div>
 
   </div>

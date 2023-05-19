@@ -861,8 +861,13 @@ table {
   </style>
 
   <style type="text/css">
-  .codehilite .hll { background-color: #ffffcc }
-.codehilite  { background: #f8f8f8; }
+  pre { line-height: 125%; margin: 0; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
 .codehilite .c { color: #408080; font-style: italic } /* Comment */
 .codehilite .err { border: 1px solid #FF0000 } /* Error */
 .codehilite .k { color: #008000; font-weight: bold } /* Keyword */
@@ -1078,8 +1083,11 @@ table {
     <li class="mono"><a href="#wilson.translate.flavio_to_JMS">flavio_to_JMS</a></li>
     <li class="mono"><a href="#wilson.translate.flavio_to_JMS_wet3">flavio_to_JMS_wet3</a></li>
     <li class="mono"><a href="#wilson.translate.flavio_to_JMS_wet4">flavio_to_JMS_wet4</a></li>
+    <li class="mono"><a href="#wilson.translate.higgs_up_to_warsaw">higgs_up_to_warsaw</a></li>
+    <li class="mono"><a href="#wilson.translate.higgs_up_to_warsaw_up">higgs_up_to_warsaw_up</a></li>
     <li class="mono"><a href="#wilson.translate.warsaw_to_warsaw_up">warsaw_to_warsaw_up</a></li>
     <li class="mono"><a href="#wilson.translate.warsaw_to_warsawmass">warsaw_to_warsawmass</a></li>
+    <li class="mono"><a href="#wilson.translate.warsaw_up_to_higgs_up">warsaw_up_to_higgs_up</a></li>
     <li class="mono"><a href="#wilson.translate.warsaw_up_to_warsaw">warsaw_up_to_warsaw</a></li>
   </ul>
 
@@ -1089,7 +1097,9 @@ table {
     <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
         <li class="mono"><a href="smeft.m.html">wilson.translate.smeft</a></li>
+        <li class="mono"><a href="smeft_higgs.m.html">wilson.translate.smeft_higgs</a></li>
         <li class="mono"><a href="test_smeft.m.html">wilson.translate.test_smeft</a></li>
+        <li class="mono"><a href="test_smeft_higgs.m.html">wilson.translate.test_smeft_higgs</a></li>
         <li class="mono"><a href="test_wet.m.html">wilson.translate.test_wet</a></li>
         <li class="mono"><a href="wet.m.html">wilson.translate.wet</a></li>
       </ul>
@@ -1115,138 +1125,159 @@ table {
 <span class="sd">`wcxf` Python package.&quot;&quot;&quot;</span>
 
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">smeft</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">smeft</span><span class="p">,</span> <span class="n">smeft_higgs</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">wet</span>
-<span class="kn">import</span> <span class="nn">wcxf</span>
+<span class="kn">from</span> <span class="nn">wilson</span> <span class="kn">import</span> <span class="n">wcxf</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw mass&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">warsaw_to_warsawmass</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsawmass</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Higgs-Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">higgs_up_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">smeft_higgs</span><span class="o">.</span><span class="n">higgslike_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Higgs-Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">higgs_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">smeft_higgs</span><span class="o">.</span><span class="n">higgslike_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;Higgs-Warsaw up&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">warsaw_up_to_higgs_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">smeft_higgs</span><span class="o">.</span><span class="n">warsaw_up_to_higgslike</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;Higgs-Warsaw up&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">warsaw_up_to_higgs_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">smeft_higgs</span><span class="o">.</span><span class="n">warsaw_up_to_higgslike</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">flavio_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw mass&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">warsaw_to_warsawmass</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsawmass</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">flavio_to_JMS_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">flavio_to_JMS_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">flavio_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_JMS</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_flavio_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">flavio_to_JMS_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_JMS</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_flavio_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">flavio_to_JMS_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_JMS</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">Bern_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">flavio_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_flavio_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">Bern_to_flavio_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_flavio_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">flavio_to_Bern_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Bern_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_flavio</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">Bern_to_flavio_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">flavio_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_Bern</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">flavio_to_Bern_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Bern_to_flavio_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_flavio</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;EOS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_EOS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_EOS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">flavio_to_Bern_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_Bern</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Bern_to_flavio_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_flavio</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_Bern_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">flavio_to_Bern_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_Bern</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_Bern_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;EOS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_EOS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_EOS</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">Bern_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">Bern_to_JMS_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">Bern_to_JMS_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;formflavor&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_FormFlavor</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_FormFlavor</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_Bern_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;FlavorKit&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">FlavorKit_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">FlavorKit_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_Bern_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;FlavorKit&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_FlavorKit</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_FlavorKit</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Bern_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_JMS</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Bern_to_JMS_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_JMS</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Bern_to_JMS_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_JMS</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;FlavorKit&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">FlavorKit_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">FlavorKit_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">C_JMS</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;formflavor&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_FormFlavor</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_FormFlavor</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+
+
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;FlavorKit&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">FlavorKit_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">FlavorKit_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+
+
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;FlavorKit&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_FlavorKit</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_FlavorKit</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+
+
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;FlavorKit&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">FlavorKit_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">FlavorKit_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C_JMS</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1259,7 +1290,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.Bern_to_JMS">
-    <p>def <span class="ident">Bern_to_JMS</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">Bern_to_JMS</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1268,9 +1299,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.Bern_to_JMS', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.Bern_to_JMS" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">Bern_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Bern_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_JMS</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1281,7 +1312,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.Bern_to_JMS_wet3">
-    <p>def <span class="ident">Bern_to_JMS_wet3</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">Bern_to_JMS_wet3</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1290,9 +1321,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.Bern_to_JMS_wet3', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.Bern_to_JMS_wet3" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">Bern_to_JMS_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Bern_to_JMS_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_JMS</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1303,7 +1334,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.Bern_to_JMS_wet4">
-    <p>def <span class="ident">Bern_to_JMS_wet4</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">Bern_to_JMS_wet4</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1312,9 +1343,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.Bern_to_JMS_wet4', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.Bern_to_JMS_wet4" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">Bern_to_JMS_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Bern_to_JMS_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_JMS</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1325,7 +1356,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.Bern_to_flavio">
-    <p>def <span class="ident">Bern_to_flavio</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">Bern_to_flavio</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1334,9 +1365,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.Bern_to_flavio', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.Bern_to_flavio" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">Bern_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Bern_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_flavio</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1347,7 +1378,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.Bern_to_flavio_wet3">
-    <p>def <span class="ident">Bern_to_flavio_wet3</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">Bern_to_flavio_wet3</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1356,9 +1387,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.Bern_to_flavio_wet3', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.Bern_to_flavio_wet3" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">Bern_to_flavio_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Bern_to_flavio_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_flavio</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1369,7 +1400,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.Bern_to_flavio_wet4">
-    <p>def <span class="ident">Bern_to_flavio_wet4</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">Bern_to_flavio_wet4</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1378,9 +1409,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.Bern_to_flavio_wet4', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.Bern_to_flavio_wet4" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">Bern_to_flavio_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Bern_to_flavio_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">Bern_to_flavio</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1391,7 +1422,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.FlavorKit_to_JMS">
-    <p>def <span class="ident">FlavorKit_to_JMS</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">FlavorKit_to_JMS</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1400,9 +1431,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.FlavorKit_to_JMS', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.FlavorKit_to_JMS" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;FlavorKit&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">FlavorKit_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">FlavorKit_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;FlavorKit&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">FlavorKit_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">FlavorKit_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1413,7 +1444,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.FlavorKit_to_flavio">
-    <p>def <span class="ident">FlavorKit_to_flavio</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">FlavorKit_to_flavio</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1422,10 +1453,10 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.FlavorKit_to_flavio', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.FlavorKit_to_flavio" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;FlavorKit&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">FlavorKit_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">FlavorKit_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">C_JMS</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;FlavorKit&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">FlavorKit_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">FlavorKit_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C_JMS</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1436,7 +1467,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.JMS_to_Bern">
-    <p>def <span class="ident">JMS_to_Bern</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">JMS_to_Bern</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1445,9 +1476,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.JMS_to_Bern', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.JMS_to_Bern" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1458,7 +1489,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.JMS_to_Bern_wet3">
-    <p>def <span class="ident">JMS_to_Bern_wet3</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">JMS_to_Bern_wet3</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1467,9 +1498,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.JMS_to_Bern_wet3', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.JMS_to_Bern_wet3" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_Bern_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_Bern_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1480,7 +1511,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.JMS_to_Bern_wet4">
-    <p>def <span class="ident">JMS_to_Bern_wet4</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">JMS_to_Bern_wet4</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1489,9 +1520,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.JMS_to_Bern_wet4', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.JMS_to_Bern_wet4" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_Bern_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_Bern_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1502,7 +1533,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.JMS_to_EOS">
-    <p>def <span class="ident">JMS_to_EOS</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">JMS_to_EOS</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1511,9 +1542,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.JMS_to_EOS', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.JMS_to_EOS" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;EOS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_EOS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_EOS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;EOS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_EOS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_EOS</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1524,7 +1555,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.JMS_to_FlavorKit">
-    <p>def <span class="ident">JMS_to_FlavorKit</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">JMS_to_FlavorKit</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1533,9 +1564,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.JMS_to_FlavorKit', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.JMS_to_FlavorKit" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;FlavorKit&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_FlavorKit</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_FlavorKit</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;FlavorKit&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_FlavorKit</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_FlavorKit</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1546,7 +1577,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.JMS_to_FormFlavor">
-    <p>def <span class="ident">JMS_to_FormFlavor</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">JMS_to_FormFlavor</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1555,9 +1586,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.JMS_to_FormFlavor', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.JMS_to_FormFlavor" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;formflavor&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_FormFlavor</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_FormFlavor</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;formflavor&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_FormFlavor</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_FormFlavor</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1568,7 +1599,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.JMS_to_flavio">
-    <p>def <span class="ident">JMS_to_flavio</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">JMS_to_flavio</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1577,9 +1608,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.JMS_to_flavio', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.JMS_to_flavio" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1590,7 +1621,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.JMS_to_flavio_wet3">
-    <p>def <span class="ident">JMS_to_flavio_wet3</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">JMS_to_flavio_wet3</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1599,9 +1630,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.JMS_to_flavio_wet3', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.JMS_to_flavio_wet3" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_flavio_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_flavio_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1612,7 +1643,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.JMS_to_flavio_wet4">
-    <p>def <span class="ident">JMS_to_flavio_wet4</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">JMS_to_flavio_wet4</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1621,9 +1652,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.JMS_to_flavio_wet4', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.JMS_to_flavio_wet4" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">JMS_to_flavio_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">JMS_to_flavio_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">Cflat</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1634,7 +1665,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.flavio_to_Bern">
-    <p>def <span class="ident">flavio_to_Bern</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">flavio_to_Bern</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1643,9 +1674,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.flavio_to_Bern', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.flavio_to_Bern" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">flavio_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">flavio_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_Bern</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1656,7 +1687,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.flavio_to_Bern_wet3">
-    <p>def <span class="ident">flavio_to_Bern_wet3</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">flavio_to_Bern_wet3</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1665,9 +1696,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.flavio_to_Bern_wet3', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.flavio_to_Bern_wet3" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">flavio_to_Bern_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">flavio_to_Bern_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_Bern</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1678,7 +1709,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.flavio_to_Bern_wet4">
-    <p>def <span class="ident">flavio_to_Bern_wet4</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">flavio_to_Bern_wet4</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1687,9 +1718,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.flavio_to_Bern_wet4', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.flavio_to_Bern_wet4" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">flavio_to_Bern_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_Bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">flavio_to_Bern_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_Bern</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1700,7 +1731,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.flavio_to_JMS">
-    <p>def <span class="ident">flavio_to_JMS</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">flavio_to_JMS</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1709,9 +1740,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.flavio_to_JMS', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.flavio_to_JMS" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">flavio_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">flavio_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_JMS</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1722,7 +1753,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.flavio_to_JMS_wet3">
-    <p>def <span class="ident">flavio_to_JMS_wet3</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">flavio_to_JMS_wet3</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1731,9 +1762,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.flavio_to_JMS_wet3', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.flavio_to_JMS_wet3" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">flavio_to_JMS_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">flavio_to_JMS_wet3</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_JMS</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1744,7 +1775,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.flavio_to_JMS_wet4">
-    <p>def <span class="ident">flavio_to_JMS_wet4</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">flavio_to_JMS_wet4</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1753,9 +1784,54 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.flavio_to_JMS_wet4', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.flavio_to_JMS_wet4" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">flavio_to_JMS_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_JMS</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">flavio_to_JMS_wet4</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">wet</span><span class="o">.</span><span class="n">flavio_to_JMS</span><span class="p">(</span><span class="n">C_incomplete</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="wilson.translate.higgs_up_to_warsaw">
+    <p>def <span class="ident">higgs_up_to_warsaw</span>(</p><p>C, scale, parameters, sectors=None)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.higgs_up_to_warsaw', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.translate.higgs_up_to_warsaw" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Higgs-Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">higgs_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">smeft_higgs</span><span class="o">.</span><span class="n">higgslike_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="wilson.translate.higgs_up_to_warsaw_up">
+    <p>def <span class="ident">higgs_up_to_warsaw_up</span>(</p><p>C, scale, parameters, sectors=None)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.higgs_up_to_warsaw_up', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.translate.higgs_up_to_warsaw_up" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Higgs-Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">higgs_up_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">smeft_higgs</span><span class="o">.</span><span class="n">higgslike_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1766,7 +1842,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.warsaw_to_warsaw_up">
-    <p>def <span class="ident">warsaw_to_warsaw_up</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">warsaw_to_warsaw_up</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1775,9 +1851,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.warsaw_to_warsaw_up', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.warsaw_to_warsaw_up" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1788,7 +1864,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.warsaw_to_warsawmass">
-    <p>def <span class="ident">warsaw_to_warsawmass</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">warsaw_to_warsawmass</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1797,9 +1873,32 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.warsaw_to_warsawmass', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.warsaw_to_warsawmass" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw mass&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">warsaw_to_warsawmass</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsawmass</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw mass&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">warsaw_to_warsawmass</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsawmass</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="wilson.translate.warsaw_up_to_higgs_up">
+    <p>def <span class="ident">warsaw_up_to_higgs_up</span>(</p><p>C, scale, parameters, sectors=None)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.warsaw_up_to_higgs_up', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.translate.warsaw_up_to_higgs_up" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;Higgs-Warsaw up&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">warsaw_up_to_higgs_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">smeft_higgs</span><span class="o">.</span><span class="n">warsaw_up_to_higgslike</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1810,7 +1909,7 @@ table {
       
   <div class="item">
     <div class="name def" id="wilson.translate.warsaw_up_to_warsaw">
-    <p>def <span class="ident">warsaw_up_to_warsaw</span>(</p><p>C, scale, parameters)</p>
+    <p>def <span class="ident">warsaw_up_to_warsaw</span>(</p><p>C, scale, parameters, sectors=None)</p>
     </div>
     
 
@@ -1819,9 +1918,9 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.translate.warsaw_up_to_warsaw', this);">Show source &equiv;</a></p>
   <div id="source-wilson.translate.warsaw_up_to_warsaw" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">translator</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_up_to_warsaw</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1839,7 +1938,24 @@ table {
 
       </div>
       <div class="item">
+      <p class="name"><a href="smeft_higgs.m.html">wilson.translate.smeft_higgs</a></p>
+      
+  
+    <div class="desc"><p>Functions for translating to and from the SMEFT Higgs-like basis.</p>
+<p>The code was adapted from the Rosetta package:
+https://github.com/kenmimasu/Rosetta/tree/master/Rosetta
+(c) Adam Falkowski, Benjamin Fuks, Kentarou Mawatari,
+Ken Mimasu, Veronica Sanz &amp; Francesco Riva</p></div>
+
+      </div>
+      <div class="item">
       <p class="name"><a href="test_smeft.m.html">wilson.translate.test_smeft</a></p>
+      
+  
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="test_smeft_higgs.m.html">wilson.translate.test_smeft_higgs</a></p>
       
   
 

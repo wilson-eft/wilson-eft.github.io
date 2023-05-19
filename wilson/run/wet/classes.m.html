@@ -861,8 +861,13 @@ table {
   </style>
 
   <style type="text/css">
-  .codehilite .hll { background-color: #ffffcc }
-.codehilite  { background: #f8f8f8; }
+  pre { line-height: 125%; margin: 0; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
 .codehilite .c { color: #408080; font-style: italic } /* Comment */
 .codehilite .err { border: 1px solid #FF0000 } /* Error */
 .codehilite .k { color: #008000; font-weight: bold } /* Keyword */
@@ -1097,16 +1102,16 @@ package.</p>
 <span class="sd">package.&quot;&quot;&quot;</span>
 
 
-<span class="kn">import</span> <span class="nn">wcxf</span>
+<span class="kn">from</span> <span class="nn">wilson</span> <span class="kn">import</span> <span class="n">wcxf</span>
 <span class="kn">import</span> <span class="nn">wilson</span>
 <span class="kn">from</span> <span class="nn">wilson.util</span> <span class="kn">import</span> <span class="n">qcd</span>
 <span class="kn">from</span> <span class="nn">wilson.run.wet</span> <span class="kn">import</span> <span class="n">rge</span><span class="p">,</span> <span class="n">definitions</span>
-<span class="kn">from</span> <span class="nn">wilson.run.wet.parameters</span> <span class="kn">import</span> <span class="n">p</span> <span class="k">as</span> <span class="n">default_parameters</span>
+<span class="kn">from</span> <span class="nn">wilson.parameters</span> <span class="kn">import</span> <span class="n">p</span> <span class="k">as</span> <span class="n">default_parameters</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<span class="k">class</span> <span class="nc">WETrunner</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">WETrunner</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class representing a point in Wilson coefficient space.</span>
 
 <span class="sd">    Methods:</span>
@@ -1114,7 +1119,7 @@ package.</p>
 <span class="sd">    - run: Evolve the Wilson coefficients to a different scale</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">qed_order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">qcd_order</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the instance.</span>
 
 <span class="sd">        Parameters:</span>
@@ -1125,6 +1130,8 @@ package.</p>
 <span class="sd">        - parameters: optional. If provided, must be a dictionary containing</span>
 <span class="sd">          values for the input parameters as defined in `run.wet.parameters`.</span>
 <span class="sd">          Default values are used for all parameters not provided.</span>
+<span class="sd">        - `qcd_order`: order of QCD ADMs. 0: neglect. 1 (default): LO.</span>
+<span class="sd">        - `qed_order`: order of QED ADMs. 0: neglect. 1 (default): LO.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">wc</span><span class="o">.</span><span class="n">basis</span> <span class="o">==</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> \
@@ -1139,8 +1146,10 @@ package.</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="mi">3</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">scale</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">dict</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">default_parameters</span>
-        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">default_parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qed_order</span> <span class="o">=</span> <span class="n">qed_order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qcd_order</span> <span class="o">=</span> <span class="n">qcd_order</span>
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_running_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
@@ -1169,7 +1178,9 @@ package.</p>
             <span class="k">if</span> <span class="n">sector</span> <span class="ow">in</span> <span class="n">definitions</span><span class="o">.</span><span class="n">sectors</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">sectors</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span> <span class="ow">or</span> <span class="n">sector</span> <span class="ow">in</span> <span class="n">sectors</span><span class="p">:</span>
                     <span class="n">C_out</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">rge</span><span class="o">.</span><span class="n">run_sector</span><span class="p">(</span><span class="n">sector</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span><span class="p">,</span>
-                                                <span class="n">Etas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">p_i</span><span class="p">,</span> <span class="n">p_o</span><span class="p">))</span>
+                                                <span class="n">Etas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">p_i</span><span class="p">,</span> <span class="n">p_o</span><span class="p">,</span>
+                                                <span class="n">qed_order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qed_order</span><span class="p">,</span>
+                                                <span class="n">qcd_order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qcd_order</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">C_out</span>
 
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
@@ -1201,7 +1212,7 @@ package.</p>
         <span class="k">elif</span> <span class="n">scale</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span><span class="p">:</span>
             <span class="n">scale_max</span> <span class="o">=</span> <span class="n">scale</span>
             <span class="n">scale_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span>
-        <span class="nd">@np.vectorize</span>
+        <span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
         <span class="k">def</span> <span class="nf">_f</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_dict</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
@@ -1240,7 +1251,7 @@ package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.run.wet.classes.WETrunner', this);">Show source &equiv;</a></p>
   <div id="source-wilson.run.wet.classes.WETrunner" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">WETrunner</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">WETrunner</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class representing a point in Wilson coefficient space.</span>
 
 <span class="sd">    Methods:</span>
@@ -1248,7 +1259,7 @@ package.</p>
 <span class="sd">    - run: Evolve the Wilson coefficients to a different scale</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">qed_order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">qcd_order</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the instance.</span>
 
 <span class="sd">        Parameters:</span>
@@ -1259,6 +1270,8 @@ package.</p>
 <span class="sd">        - parameters: optional. If provided, must be a dictionary containing</span>
 <span class="sd">          values for the input parameters as defined in `run.wet.parameters`.</span>
 <span class="sd">          Default values are used for all parameters not provided.</span>
+<span class="sd">        - `qcd_order`: order of QCD ADMs. 0: neglect. 1 (default): LO.</span>
+<span class="sd">        - `qed_order`: order of QED ADMs. 0: neglect. 1 (default): LO.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">wc</span><span class="o">.</span><span class="n">basis</span> <span class="o">==</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> \
@@ -1273,8 +1286,10 @@ package.</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="mi">3</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">scale</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">dict</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">default_parameters</span>
-        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">default_parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qed_order</span> <span class="o">=</span> <span class="n">qed_order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qcd_order</span> <span class="o">=</span> <span class="n">qcd_order</span>
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_running_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
@@ -1303,7 +1318,9 @@ package.</p>
             <span class="k">if</span> <span class="n">sector</span> <span class="ow">in</span> <span class="n">definitions</span><span class="o">.</span><span class="n">sectors</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">sectors</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span> <span class="ow">or</span> <span class="n">sector</span> <span class="ow">in</span> <span class="n">sectors</span><span class="p">:</span>
                     <span class="n">C_out</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">rge</span><span class="o">.</span><span class="n">run_sector</span><span class="p">(</span><span class="n">sector</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span><span class="p">,</span>
-                                                <span class="n">Etas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">p_i</span><span class="p">,</span> <span class="n">p_o</span><span class="p">))</span>
+                                                <span class="n">Etas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">p_i</span><span class="p">,</span> <span class="n">p_o</span><span class="p">,</span>
+                                                <span class="n">qed_order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qed_order</span><span class="p">,</span>
+                                                <span class="n">qcd_order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qcd_order</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">C_out</span>
 
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
@@ -1335,7 +1352,7 @@ package.</p>
         <span class="k">elif</span> <span class="n">scale</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span><span class="p">:</span>
             <span class="n">scale_max</span> <span class="o">=</span> <span class="n">scale</span>
             <span class="n">scale_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span>
-        <span class="nd">@np.vectorize</span>
+        <span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
         <span class="k">def</span> <span class="nf">_f</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_dict</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
@@ -1358,7 +1375,7 @@ package.</p>
             
   <div class="item">
     <div class="name def" id="wilson.run.wet.classes.WETrunner.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, wc, parameters=None)</p>
+    <p>def <span class="ident">__init__</span>(</p><p>self, wc, parameters=None, qed_order=1, qcd_order=1)</p>
     </div>
     
 
@@ -1373,11 +1390,13 @@ package.</p>
 <li>parameters: optional. If provided, must be a dictionary containing
   values for the input parameters as defined in <code>run.wet.parameters</code>.
   Default values are used for all parameters not provided.</li>
+<li><code>qcd_order</code>: order of QCD ADMs. 0: neglect. 1 (default): LO.</li>
+<li><code>qed_order</code>: order of QED ADMs. 0: neglect. 1 (default): LO.</li>
 </ul></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.run.wet.classes.WETrunner.__init__', this);">Show source &equiv;</a></p>
   <div id="source-wilson.run.wet.classes.WETrunner.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">qed_order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">qcd_order</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Initialize the instance.</span>
 <span class="sd">    Parameters:</span>
 <span class="sd">    - wc: instance of `wcxf.WC` representing Wilson coefficient values</span>
@@ -1386,6 +1405,8 @@ package.</p>
 <span class="sd">    - parameters: optional. If provided, must be a dictionary containing</span>
 <span class="sd">      values for the input parameters as defined in `run.wet.parameters`.</span>
 <span class="sd">      Default values are used for all parameters not provided.</span>
+<span class="sd">    - `qcd_order`: order of QCD ADMs. 0: neglect. 1 (default): LO.</span>
+<span class="sd">    - `qed_order`: order of QED ADMs. 0: neglect. 1 (default): LO.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">wc</span><span class="o">.</span><span class="n">basis</span> <span class="o">==</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> \
@@ -1400,8 +1421,10 @@ package.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="mi">3</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">scale</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">dict</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">default_parameters</span>
-    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">default_parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">qed_order</span> <span class="o">=</span> <span class="n">qed_order</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">qcd_order</span> <span class="o">=</span> <span class="n">qcd_order</span>
+    <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
 </pre></div>
 
@@ -1475,7 +1498,7 @@ package.</p>
     <span class="k">elif</span> <span class="n">scale</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span><span class="p">:</span>
         <span class="n">scale_max</span> <span class="o">=</span> <span class="n">scale</span>
         <span class="n">scale_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span>
-    <span class="nd">@np.vectorize</span>
+    <span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
     <span class="k">def</span> <span class="nf">_f</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_dict</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
@@ -1512,6 +1535,26 @@ package.</p>
             </div>
             <div class="item">
             <p id="wilson.run.wet.classes.WETrunner.parameters" class="name">var <span class="ident">parameters</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="wilson.run.wet.classes.WETrunner.qcd_order" class="name">var <span class="ident">qcd_order</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="wilson.run.wet.classes.WETrunner.qed_order" class="name">var <span class="ident">qed_order</span></p>
             
 
             

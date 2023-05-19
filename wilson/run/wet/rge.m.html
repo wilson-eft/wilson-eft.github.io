@@ -861,8 +861,13 @@ table {
   </style>
 
   <style type="text/css">
-  .codehilite .hll { background-color: #ffffcc }
-.codehilite  { background: #f8f8f8; }
+  pre { line-height: 125%; margin: 0; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
 .codehilite .c { color: #408080; font-style: italic } /* Comment */
 .codehilite .err { border: 1px solid #FF0000 } /* Error */
 .codehilite .k { color: #008000; font-weight: bold } /* Keyword */
@@ -1059,6 +1064,7 @@ table {
     <li class="mono"><a href="#wilson.run.wet.rge.coeffs">coeffs</a></li>
     <li class="mono"><a href="#wilson.run.wet.rge.getUe">getUe</a></li>
     <li class="mono"><a href="#wilson.run.wet.rge.getUs">getUs</a></li>
+    <li class="mono"><a href="#wilson.run.wet.rge.get_permissible_wcs">get_permissible_wcs</a></li>
     <li class="mono"><a href="#wilson.run.wet.rge.lgamma">lgamma</a></li>
     <li class="mono"><a href="#wilson.run.wet.rge.pi">pi</a></li>
     <li class="mono"><a href="#wilson.run.wet.rge.qG">qG</a></li>
@@ -1102,10 +1108,33 @@ sector.</p>
 
 <span class="kn">from</span> <span class="nn">wilson.run.wet.definitions</span> <span class="kn">import</span> <span class="n">sectors</span><span class="p">,</span> <span class="n">coeffs</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">from</span> <span class="nn">wilson.run.wet</span> <span class="kn">import</span> <span class="n">adm</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">pi</span>
+<span class="kn">from</span> <span class="nn">wilson</span> <span class="kn">import</span> <span class="n">wcxf</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_permissible_wcs</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;For some classes (in particular $\Delta F=1$), only a subset of Wilson</span>
+<span class="sd">    coefficients exist in WET-3 and WET-4. Therefore, depending on the number</span>
+<span class="sd">    of flavours `f`, the dimensionality of the ADM has to be reduced.&quot;&quot;&quot;</span>
+    <span class="c1"># these are the problematic sectors</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cu&#39;</span><span class="p">,</span> <span class="s1">&#39;db&#39;</span><span class="p">,</span> <span class="s1">&#39;sb&#39;</span><span class="p">,</span> <span class="s1">&#39;sd&#39;</span><span class="p">,</span> <span class="s1">&#39;mue&#39;</span><span class="p">,</span> <span class="s1">&#39;mutau&#39;</span><span class="p">,</span> <span class="s1">&#39;taue&#39;</span><span class="p">,</span> <span class="s1">&#39;dF0&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">classname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span> <span class="ow">or</span> <span class="n">f</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="c1"># for 5-flavour WET, nothing to do.</span>
+        <span class="c1"># Neither for other classes (I, II, ...) because they exist either all</span>
+        <span class="c1"># or not at all in WET-3 and WET-4 (they have specific flavours).</span>
+        <span class="k">return</span> <span class="s1">&#39;all&#39;</span>
+    <span class="k">if</span> <span class="n">f</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;f must be 3, 4, or 5.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">classname</span> <span class="o">==</span> <span class="s1">&#39;dF0&#39;</span><span class="p">:</span>
+        <span class="n">sector</span> <span class="o">=</span> <span class="s1">&#39;dF=0&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sector</span> <span class="o">=</span> <span class="n">classname</span>
+    <span class="n">perm_keys</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;WET-</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sectors</span><span class="p">[</span><span class="n">sector</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">all_keys</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">sector</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_keys</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">perm_keys</span><span class="p">]</span>
 
 
 <span class="c1"># new ADM functions</span>
@@ -1117,6 +1146,10 @@ sector.</p>
 <span class="sd">    Supports memoization. Output analogous to `np.linalg.eig`.&quot;&quot;&quot;</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">f</span><span class="p">,</span> <span class="n">m_u</span><span class="p">,</span> <span class="n">m_d</span><span class="p">,</span> <span class="n">m_s</span><span class="p">,</span> <span class="n">m_c</span><span class="p">,</span> <span class="n">m_b</span><span class="p">,</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">m_mu</span><span class="p">,</span> <span class="n">m_tau</span>
     <span class="n">A</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">adm</span><span class="p">,</span> <span class="s1">&#39;adm_s_&#39;</span> <span class="o">+</span> <span class="n">classname</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">perm_keys</span> <span class="o">=</span> <span class="n">get_permissible_wcs</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">perm_keys</span> <span class="o">!=</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+        <span class="c1"># remove disallowed rows &amp; columns if necessary</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">perm_keys</span><span class="p">][:,</span> <span class="n">perm_keys</span><span class="p">]</span>
     <span class="n">w</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">w</span><span class="p">,</span> <span class="n">v</span>
 
@@ -1127,7 +1160,7 @@ sector.</p>
     <span class="n">w</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">admeig</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">m_u</span><span class="p">,</span> <span class="n">m_d</span><span class="p">,</span> <span class="n">m_s</span><span class="p">,</span> <span class="n">m_c</span><span class="p">,</span> <span class="n">m_b</span><span class="p">,</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">m_mu</span><span class="p">,</span> <span class="n">m_tau</span><span class="p">)</span>
     <span class="n">b0s</span> <span class="o">=</span> <span class="mi">11</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">f</span> <span class="o">/</span> <span class="mi">3</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">w</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">b0s</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">v</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">eta_s</span><span class="o">**</span><span class="n">a</span><span class="p">)</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">v</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">eta_s</span><span class="o">**</span><span class="n">a</span><span class="p">)</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 
 
 <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
@@ -1135,17 +1168,21 @@ sector.</p>
     <span class="sd">&quot;&quot;&quot;Get the QCD evolution matrix.&quot;&quot;&quot;</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">f</span><span class="p">,</span> <span class="n">m_u</span><span class="p">,</span> <span class="n">m_d</span><span class="p">,</span> <span class="n">m_s</span><span class="p">,</span> <span class="n">m_c</span><span class="p">,</span> <span class="n">m_b</span><span class="p">,</span> <span class="n">m_e</span><span class="p">,</span> <span class="n">m_mu</span><span class="p">,</span> <span class="n">m_tau</span>
     <span class="n">A</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">adm</span><span class="p">,</span> <span class="s1">&#39;adm_e_&#39;</span> <span class="o">+</span> <span class="n">classname</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">perm_keys</span> <span class="o">=</span> <span class="n">get_permissible_wcs</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">perm_keys</span> <span class="o">!=</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+        <span class="c1"># remove disallowed rows &amp; columns if necessary</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">perm_keys</span><span class="p">][:,</span> <span class="n">perm_keys</span><span class="p">]</span>
     <span class="n">w</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">admeig</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
     <span class="n">b0s</span> <span class="o">=</span> <span class="mi">11</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">f</span> <span class="o">/</span> <span class="mi">3</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">w</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">b0s</span><span class="p">)</span>
-    <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="err">@</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="err">@</span> <span class="n">v</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">@</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">v</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
             <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*=</span> <span class="p">(</span><span class="n">eta_s</span><span class="o">**</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">eta_s</span><span class="o">**</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*=</span> <span class="n">eta_s</span><span class="o">**</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">eta_s</span><span class="p">)</span>
-    <span class="k">return</span> <span class="o">-</span><span class="n">alpha_e</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">b0s</span> <span class="o">*</span> <span class="n">alpha_s</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span> <span class="err">@</span> <span class="n">K</span> <span class="err">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">alpha_e</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">b0s</span> <span class="o">*</span> <span class="n">alpha_s</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span> <span class="o">@</span> <span class="n">K</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 
 
 <span class="n">qG</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;uG&#39;</span><span class="p">,</span> <span class="s1">&#39;dG&#39;</span><span class="p">]</span>
@@ -1183,7 +1220,7 @@ sector.</p>
         <span class="k">return</span> <span class="mi">1</span>
 
 
-<span class="k">def</span> <span class="nf">run_sector</span><span class="p">(</span><span class="n">sector</span><span class="p">,</span> <span class="n">C_in</span><span class="p">,</span> <span class="n">eta_s</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">p_in</span><span class="p">,</span> <span class="n">p_out</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">run_sector</span><span class="p">(</span><span class="n">sector</span><span class="p">,</span> <span class="n">C_in</span><span class="p">,</span> <span class="n">eta_s</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">p_in</span><span class="p">,</span> <span class="n">p_out</span><span class="p">,</span> <span class="n">qed_order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">qcd_order</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Solve the WET RGE for a specific sector.</span>
 
 <span class="sd">    Parameters:</span>
@@ -1198,15 +1235,31 @@ sector.</p>
     <span class="n">Cdictout</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
     <span class="n">classname</span> <span class="o">=</span> <span class="n">sectors</span><span class="p">[</span><span class="n">sector</span><span class="p">]</span>
     <span class="n">keylist</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">sector</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sector</span> <span class="o">==</span> <span class="s1">&#39;dF=0&#39;</span><span class="p">:</span>
+        <span class="n">perm_keys</span> <span class="o">=</span> <span class="n">get_permissible_wcs</span><span class="p">(</span><span class="s1">&#39;dF0&#39;</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">perm_keys</span> <span class="o">=</span> <span class="n">get_permissible_wcs</span><span class="p">(</span><span class="n">sector</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">perm_keys</span> <span class="o">!=</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+        <span class="c1"># remove disallowed keys if necessary</span>
+        <span class="n">keylist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">keylist</span><span class="p">)[</span><span class="n">perm_keys</span><span class="p">]</span>
     <span class="n">C_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">C_in</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keylist</span><span class="p">])</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">C_input</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">classname</span> <span class="o">==</span> <span class="s1">&#39;inv&#39;</span><span class="p">:</span>
         <span class="c1"># nothing to do for SM-like WCs or RG invariant operators</span>
         <span class="n">C_result</span> <span class="o">=</span> <span class="n">C_input</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">Us</span> <span class="o">=</span> <span class="n">getUs</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">eta_s</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">p_in</span><span class="p">)</span>
-        <span class="n">Ue</span> <span class="o">=</span> <span class="n">getUe</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">eta_s</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">p_in</span><span class="p">)</span>
-        <span class="n">C_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="n">C_input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale_C</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">p_in</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">keylist</span><span class="p">)]</span>
-        <span class="n">C_out</span> <span class="o">=</span> <span class="p">(</span><span class="n">Us</span> <span class="o">+</span> <span class="n">Ue</span><span class="p">)</span> <span class="err">@</span> <span class="n">C_scaled</span>
+        <span class="n">C_scaled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">C_input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale_C</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">p_in</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">keylist</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="n">qcd_order</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Us</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">C_scaled</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">qcd_order</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">Us</span> <span class="o">=</span> <span class="n">getUs</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">eta_s</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">p_in</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">qed_order</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Ue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">C_scaled</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">qed_order</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">qcd_order</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">Ue</span> <span class="o">=</span> <span class="n">getUe</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">p_in</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">Ue</span> <span class="o">=</span> <span class="n">getUe</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">eta_s</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">p_in</span><span class="p">)</span>
+        <span class="n">C_out</span> <span class="o">=</span> <span class="p">(</span><span class="n">Us</span> <span class="o">+</span> <span class="n">Ue</span><span class="p">)</span> <span class="o">@</span> <span class="n">C_scaled</span>
         <span class="n">C_result</span> <span class="o">=</span> <span class="p">[</span><span class="n">C_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">scale_C</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">p_out</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">keylist</span><span class="p">)]</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">C_result</span><span class="p">)):</span>
         <span class="n">Cdictout</span><span class="p">[</span><span class="n">keylist</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">=</span> <span class="n">C_result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
@@ -1253,6 +1306,14 @@ sector.</p>
       </div>
       <div class="item">
       <p id="wilson.run.wet.rge.getUs" class="name">var <span class="ident">getUs</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="wilson.run.wet.rge.get_permissible_wcs" class="name">var <span class="ident">get_permissible_wcs</span></p>
       
   
   <div class="source_cont">
@@ -1334,7 +1395,7 @@ sector.</p>
       
   <div class="item">
     <div class="name def" id="wilson.run.wet.rge.run_sector">
-    <p>def <span class="ident">run_sector</span>(</p><p>sector, C_in, eta_s, f, p_in, p_out)</p>
+    <p>def <span class="ident">run_sector</span>(</p><p>sector, C_in, eta_s, f, p_in, p_out, qed_order=1, qcd_order=1)</p>
     </div>
     
 
@@ -1353,7 +1414,7 @@ sector.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.run.wet.rge.run_sector', this);">Show source &equiv;</a></p>
   <div id="source-wilson.run.wet.rge.run_sector" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">run_sector</span><span class="p">(</span><span class="n">sector</span><span class="p">,</span> <span class="n">C_in</span><span class="p">,</span> <span class="n">eta_s</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">p_in</span><span class="p">,</span> <span class="n">p_out</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">run_sector</span><span class="p">(</span><span class="n">sector</span><span class="p">,</span> <span class="n">C_in</span><span class="p">,</span> <span class="n">eta_s</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">p_in</span><span class="p">,</span> <span class="n">p_out</span><span class="p">,</span> <span class="n">qed_order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">qcd_order</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Solve the WET RGE for a specific sector.</span>
 
 <span class="sd">    Parameters:</span>
@@ -1368,15 +1429,31 @@ sector.</p>
     <span class="n">Cdictout</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
     <span class="n">classname</span> <span class="o">=</span> <span class="n">sectors</span><span class="p">[</span><span class="n">sector</span><span class="p">]</span>
     <span class="n">keylist</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">[</span><span class="n">sector</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sector</span> <span class="o">==</span> <span class="s1">&#39;dF=0&#39;</span><span class="p">:</span>
+        <span class="n">perm_keys</span> <span class="o">=</span> <span class="n">get_permissible_wcs</span><span class="p">(</span><span class="s1">&#39;dF0&#39;</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">perm_keys</span> <span class="o">=</span> <span class="n">get_permissible_wcs</span><span class="p">(</span><span class="n">sector</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">perm_keys</span> <span class="o">!=</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+        <span class="c1"># remove disallowed keys if necessary</span>
+        <span class="n">keylist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">keylist</span><span class="p">)[</span><span class="n">perm_keys</span><span class="p">]</span>
     <span class="n">C_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">C_in</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keylist</span><span class="p">])</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">C_input</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">classname</span> <span class="o">==</span> <span class="s1">&#39;inv&#39;</span><span class="p">:</span>
         <span class="c1"># nothing to do for SM-like WCs or RG invariant operators</span>
         <span class="n">C_result</span> <span class="o">=</span> <span class="n">C_input</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">Us</span> <span class="o">=</span> <span class="n">getUs</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">eta_s</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">p_in</span><span class="p">)</span>
-        <span class="n">Ue</span> <span class="o">=</span> <span class="n">getUe</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">eta_s</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">p_in</span><span class="p">)</span>
-        <span class="n">C_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="n">C_input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale_C</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">p_in</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">keylist</span><span class="p">)]</span>
-        <span class="n">C_out</span> <span class="o">=</span> <span class="p">(</span><span class="n">Us</span> <span class="o">+</span> <span class="n">Ue</span><span class="p">)</span> <span class="err">@</span> <span class="n">C_scaled</span>
+        <span class="n">C_scaled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">C_input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale_C</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">p_in</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">keylist</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="n">qcd_order</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Us</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">C_scaled</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">qcd_order</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">Us</span> <span class="o">=</span> <span class="n">getUs</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">eta_s</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">p_in</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">qed_order</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Ue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">C_scaled</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">qed_order</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">qcd_order</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">Ue</span> <span class="o">=</span> <span class="n">getUe</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">p_in</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">Ue</span> <span class="o">=</span> <span class="n">getUe</span><span class="p">(</span><span class="n">classname</span><span class="p">,</span> <span class="n">eta_s</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">p_in</span><span class="p">)</span>
+        <span class="n">C_out</span> <span class="o">=</span> <span class="p">(</span><span class="n">Us</span> <span class="o">+</span> <span class="n">Ue</span><span class="p">)</span> <span class="o">@</span> <span class="n">C_scaled</span>
         <span class="n">C_result</span> <span class="o">=</span> <span class="p">[</span><span class="n">C_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">scale_C</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">p_out</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">keylist</span><span class="p">)]</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">C_result</span><span class="p">)):</span>
         <span class="n">Cdictout</span><span class="p">[</span><span class="n">keylist</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">=</span> <span class="n">C_result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
