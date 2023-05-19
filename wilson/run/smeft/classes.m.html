@@ -860,8 +860,13 @@ table {
   </style>
 
   <style type="text/css">
-  .codehilite .hll { background-color: #ffffcc }
-.codehilite  { background: #f8f8f8; }
+  pre { line-height: 125%; margin: 0; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
 .codehilite .c { color: #408080; font-style: italic } /* Comment */
 .codehilite .err { border: 1px solid #FF0000 } /* Error */
 .codehilite .k { color: #008000; font-weight: bold } /* Keyword */
@@ -1060,6 +1065,7 @@ table {
           
   <ul>
     <li class="mono"><a href="#wilson.run.smeft.classes.SMEFT.__init__">__init__</a></li>
+    <li class="mono"><a href="#wilson.run.smeft.classes.SMEFT.get_smpar">get_smpar</a></li>
     <li class="mono"><a href="#wilson.run.smeft.classes.SMEFT.run">run</a></li>
     <li class="mono"><a href="#wilson.run.smeft.classes.SMEFT.run_continuous">run_continuous</a></li>
   </ul>
@@ -1088,17 +1094,16 @@ table {
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">rge</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">definitions</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">beta</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">smpar</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">ckmutil.phases</span><span class="o">,</span> <span class="nn">ckmutil.diag</span>
 <span class="kn">import</span> <span class="nn">wilson</span>
 <span class="kn">from</span> <span class="nn">wilson.util</span> <span class="kn">import</span> <span class="n">smeftutil</span>
-<span class="kn">import</span> <span class="nn">wcxf</span>
+<span class="kn">from</span> <span class="nn">wilson</span> <span class="kn">import</span> <span class="n">wcxf</span>
 
 
-<span class="k">class</span> <span class="nc">SMEFT</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">SMEFT</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class representing a parameter point in the Standard Model Effective</span>
 <span class="sd">    Field Theory and allowing the evolution of the Wilson Coefficients.</span>
 
@@ -1108,7 +1113,7 @@ table {
 <span class="sd">    - run: solve the RGE and return a wcxf.WC instance</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the SMEFT instance.</span>
 
 <span class="sd">        Parameters:</span>
@@ -1116,9 +1121,9 @@ table {
 <span class="sd">        - `wc`: the Wilson coefficients as `wcxf.WC` instance.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wc</span> <span class="o">=</span> <span class="n">wc</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="k">if</span> <span class="n">wc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">wc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_initial_wcxf</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="n">get_smpar</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_set_initial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">):</span>
@@ -1127,7 +1132,7 @@ table {
         <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="o">=</span> <span class="n">C_in</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="o">=</span> <span class="n">scale_in</span>
 
-    <span class="k">def</span> <span class="nf">_set_initial_wcxf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_set_initial_wcxf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load the initial values for Wilson coefficients from a</span>
 <span class="sd">        wcxf.WC instance.</span>
 
@@ -1148,23 +1153,21 @@ table {
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wilson coefficients use wrong EFT.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">wc</span><span class="o">.</span><span class="n">basis</span> <span class="o">!=</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wilson coefficients use wrong basis.&quot;</span><span class="p">)</span>
-        <span class="n">C</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">wcxf2arrays</span><span class="p">(</span><span class="n">wc</span><span class="o">.</span><span class="n">dict</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">scale</span>
-        <span class="n">C</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">symmetrize</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">smeftutil</span><span class="o">.</span><span class="n">wcxf2arrays_symmetrized</span><span class="p">(</span><span class="n">wc</span><span class="o">.</span><span class="n">dict</span><span class="p">)</span>
         <span class="c1"># fill in zeros for missing WCs</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">C_keys_shape</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">C</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">SM_keys</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">C</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">dim4_keys</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">C</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">C</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="o">=</span> <span class="n">C</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">get_smpar</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_sm_scale_in</span><span class="p">())</span>
-
 
     <span class="k">def</span> <span class="nf">_to_wcxf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C_out</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the Wilson coefficients `C_out` as a wcxf.WC instance.</span>
@@ -1173,10 +1176,7 @@ table {
 <span class="sd">        as defined in WCxf, i.e. to the basis where the down-type and charged</span>
 <span class="sd">        lepton mass matrices are diagonal.&quot;&quot;&quot;</span>
         <span class="n">C</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rotate_defaultbasis</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">arrays2wcxf</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
-        <span class="n">basis</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">]</span>
-        <span class="n">all_wcs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">basis</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>  <span class="c1"># to speed up lookup</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_wcs</span> <span class="ow">and</span> <span class="n">v</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">smeftutil</span><span class="o">.</span><span class="n">arrays2wcxf_nonred</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="o">.</span><span class="n">dict2values</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
         <span class="n">wc</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wc</span>
@@ -1193,7 +1193,7 @@ table {
                             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_rgevolve_leadinglog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute the leading logarithmix approximation to the solution</span>
+        <span class="sd">&quot;&quot;&quot;Compute the leading logarithmic approximation to the solution</span>
 <span class="sd">        of the SMEFT RGEs from the initial scale to `scale_out`.</span>
 <span class="sd">        Returns a dictionary with parameters and Wilson coefficients.</span>
 <span class="sd">        Much faster but less precise that `rgevolve`.</span>
@@ -1206,9 +1206,9 @@ table {
     <span class="k">def</span> <span class="nf">_check_initial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check if initial values and scale as well as the new physics scale</span>
 <span class="sd">        have been set.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;You have to specify the initial conditions first.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;You have to specify the initial scale first.&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_rotate_defaultbasis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
@@ -1235,20 +1235,35 @@ table {
 <span class="sd">        of the Wilson coefficients at that scale, and run them to the</span>
 <span class="sd">        input scale.&quot;&quot;&quot;</span>
         <span class="c1"># initialize an empty SMEFT instance</span>
-        <span class="n">smeft_sm</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="n">wc</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
-        <span class="n">C_in_sm</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">C_array2dict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">9999</span><span class="p">))</span>
+        <span class="n">smeft_sm</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="n">wc</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">C_in_sm</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">C_array2dict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">9999</span><span class="p">))</span>
         <span class="c1"># set the SM parameters to the values obtained from smpar.smeftpar</span>
         <span class="n">C_SM</span> <span class="o">=</span> <span class="n">smpar</span><span class="o">.</span><span class="n">smeftpar</span><span class="p">(</span><span class="n">scale_sm</span><span class="p">,</span> <span class="n">C_out</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s1">&#39;Warsaw&#39;</span><span class="p">)</span>
-        <span class="n">SM_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">smeftutil</span><span class="o">.</span><span class="n">SM_keys</span><span class="p">)</span>  <span class="c1"># to speed up lookup</span>
+        <span class="n">SM_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">smeftutil</span><span class="o">.</span><span class="n">dim4_keys</span><span class="p">)</span>  <span class="c1"># to speed up lookup</span>
         <span class="n">C_SM</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C_SM</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">SM_keys</span><span class="p">}</span>
         <span class="c1"># set the Wilson coefficients at the EW scale to C_out</span>
         <span class="n">C_in_sm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
         <span class="n">C_in_sm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">C_SM</span><span class="p">)</span>
         <span class="n">smeft_sm</span><span class="o">.</span><span class="n">_set_initial</span><span class="p">(</span><span class="n">C_in_sm</span><span class="p">,</span> <span class="n">scale_sm</span><span class="p">)</span>
         <span class="c1"># run up (with 1% relative precision, ignore running of Wilson coefficients)</span>
-        <span class="n">C_SM_high</span> <span class="o">=</span> <span class="n">smeft_sm</span><span class="o">.</span><span class="n">_rgevolve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">C_SM_high</span> <span class="o">=</span> <span class="n">smeft_sm</span><span class="o">.</span><span class="n">_rgevolve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">C_SM_high</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rotate_defaultbasis</span><span class="p">(</span><span class="n">C_SM_high</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C_SM_high</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">SM_keys</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">get_smpar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="s1">&#39;integrate&#39;</span><span class="p">,</span> <span class="n">scale_sm</span><span class="o">=</span><span class="mf">91.1876</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the SM MS-bar parameters at the electroweak scale.</span>
+
+<span class="sd">        This method can be used to validate the accuracy of the iterative</span>
+<span class="sd">        extraction of SM parameters. If successful, the values returned by this</span>
+<span class="sd">        method should agree with the values in the dictionary</span>
+<span class="sd">        `wilson.run.smeft.smpar.p`.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">accuracy</span> <span class="o">==</span> <span class="s1">&#39;integrate&#39;</span><span class="p">:</span>
+            <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve</span><span class="p">(</span><span class="n">scale_sm</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">accuracy</span> <span class="o">==</span> <span class="s1">&#39;leadinglog&#39;</span><span class="p">:</span>
+            <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve_leadinglog</span><span class="p">(</span><span class="n">scale_sm</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">&#39; is not a valid value of &#39;accuracy&#39; (must be either &#39;integrate&#39; or &#39;leadinglog&#39;).&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">smpar</span><span class="o">.</span><span class="n">smpar</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_sm_scale_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_sm</span><span class="o">=</span><span class="mf">91.1876</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get an estimate of the SM parameters at the input scale by running</span>
@@ -1260,7 +1275,7 @@ table {
 <span class="sd">        Wilson coefficients (the ones affecting the extraction of SM parameters)</span>
 <span class="sd">        are large.&quot;&quot;&quot;</span>
         <span class="c1"># intialize a copy of ourselves</span>
-        <span class="n">_smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">_smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="c1"># Step 1: run the SM up, using the WCs at scale_input as (constant) estimate</span>
         <span class="n">_smeft</span><span class="o">.</span><span class="n">C_in</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_run_sm_scale_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_sm</span><span class="o">=</span><span class="n">scale_sm</span><span class="p">))</span>
         <span class="c1"># Step 2: run the WCs down in LL approximation</span>
@@ -1279,7 +1294,12 @@ table {
 <span class="sd">        (&#39;integrate&#39;, the default, slow but precise) or the leading logarithmic</span>
 <span class="sd">        approximation (&#39;leadinglog&#39;, approximate but much faster).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">accuracy</span> <span class="o">==</span> <span class="s1">&#39;integrate&#39;</span><span class="p">:</span>
+            <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">accuracy</span> <span class="o">==</span> <span class="s1">&#39;leadinglog&#39;</span><span class="p">:</span>
+            <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve_leadinglog</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">&#39; is not a valid value of &#39;accuracy&#39; (must be either &#39;integrate&#39; or &#39;leadinglog&#39;).&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_wcxf</span><span class="p">(</span><span class="n">C_out</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">run_continuous</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
@@ -1321,7 +1341,7 @@ Field Theory and allowing the evolution of the Wilson Coefficients.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.run.smeft.classes.SMEFT', this);">Show source &equiv;</a></p>
   <div id="source-wilson.run.smeft.classes.SMEFT" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SMEFT</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SMEFT</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class representing a parameter point in the Standard Model Effective</span>
 <span class="sd">    Field Theory and allowing the evolution of the Wilson Coefficients.</span>
 
@@ -1331,7 +1351,7 @@ Field Theory and allowing the evolution of the Wilson Coefficients.</p>
 <span class="sd">    - run: solve the RGE and return a wcxf.WC instance</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the SMEFT instance.</span>
 
 <span class="sd">        Parameters:</span>
@@ -1339,9 +1359,9 @@ Field Theory and allowing the evolution of the Wilson Coefficients.</p>
 <span class="sd">        - `wc`: the Wilson coefficients as `wcxf.WC` instance.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wc</span> <span class="o">=</span> <span class="n">wc</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="k">if</span> <span class="n">wc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">wc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_initial_wcxf</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="n">get_smpar</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_set_initial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">):</span>
@@ -1350,7 +1370,7 @@ Field Theory and allowing the evolution of the Wilson Coefficients.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="o">=</span> <span class="n">C_in</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="o">=</span> <span class="n">scale_in</span>
 
-    <span class="k">def</span> <span class="nf">_set_initial_wcxf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_set_initial_wcxf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load the initial values for Wilson coefficients from a</span>
 <span class="sd">        wcxf.WC instance.</span>
 
@@ -1371,23 +1391,21 @@ Field Theory and allowing the evolution of the Wilson Coefficients.</p>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wilson coefficients use wrong EFT.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">wc</span><span class="o">.</span><span class="n">basis</span> <span class="o">!=</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wilson coefficients use wrong basis.&quot;</span><span class="p">)</span>
-        <span class="n">C</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">wcxf2arrays</span><span class="p">(</span><span class="n">wc</span><span class="o">.</span><span class="n">dict</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">scale</span>
-        <span class="n">C</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">symmetrize</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">smeftutil</span><span class="o">.</span><span class="n">wcxf2arrays_symmetrized</span><span class="p">(</span><span class="n">wc</span><span class="o">.</span><span class="n">dict</span><span class="p">)</span>
         <span class="c1"># fill in zeros for missing WCs</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">C_keys_shape</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">C</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">SM_keys</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">C</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">dim4_keys</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">C</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">C</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="o">=</span> <span class="n">C</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">get_smpar</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_sm_scale_in</span><span class="p">())</span>
-
 
     <span class="k">def</span> <span class="nf">_to_wcxf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C_out</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the Wilson coefficients `C_out` as a wcxf.WC instance.</span>
@@ -1396,10 +1414,7 @@ Field Theory and allowing the evolution of the Wilson Coefficients.</p>
 <span class="sd">        as defined in WCxf, i.e. to the basis where the down-type and charged</span>
 <span class="sd">        lepton mass matrices are diagonal.&quot;&quot;&quot;</span>
         <span class="n">C</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rotate_defaultbasis</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">arrays2wcxf</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
-        <span class="n">basis</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">]</span>
-        <span class="n">all_wcs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">basis</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>  <span class="c1"># to speed up lookup</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_wcs</span> <span class="ow">and</span> <span class="n">v</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">smeftutil</span><span class="o">.</span><span class="n">arrays2wcxf_nonred</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="o">.</span><span class="n">dict2values</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
         <span class="n">wc</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wc</span>
@@ -1416,7 +1431,7 @@ Field Theory and allowing the evolution of the Wilson Coefficients.</p>
                             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_rgevolve_leadinglog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute the leading logarithmix approximation to the solution</span>
+        <span class="sd">&quot;&quot;&quot;Compute the leading logarithmic approximation to the solution</span>
 <span class="sd">        of the SMEFT RGEs from the initial scale to `scale_out`.</span>
 <span class="sd">        Returns a dictionary with parameters and Wilson coefficients.</span>
 <span class="sd">        Much faster but less precise that `rgevolve`.</span>
@@ -1429,9 +1444,9 @@ Field Theory and allowing the evolution of the Wilson Coefficients.</p>
     <span class="k">def</span> <span class="nf">_check_initial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check if initial values and scale as well as the new physics scale</span>
 <span class="sd">        have been set.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;You have to specify the initial conditions first.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;You have to specify the initial scale first.&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_rotate_defaultbasis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
@@ -1458,20 +1473,35 @@ Field Theory and allowing the evolution of the Wilson Coefficients.</p>
 <span class="sd">        of the Wilson coefficients at that scale, and run them to the</span>
 <span class="sd">        input scale.&quot;&quot;&quot;</span>
         <span class="c1"># initialize an empty SMEFT instance</span>
-        <span class="n">smeft_sm</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="n">wc</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
-        <span class="n">C_in_sm</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">C_array2dict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">9999</span><span class="p">))</span>
+        <span class="n">smeft_sm</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="n">wc</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">C_in_sm</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">C_array2dict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">9999</span><span class="p">))</span>
         <span class="c1"># set the SM parameters to the values obtained from smpar.smeftpar</span>
         <span class="n">C_SM</span> <span class="o">=</span> <span class="n">smpar</span><span class="o">.</span><span class="n">smeftpar</span><span class="p">(</span><span class="n">scale_sm</span><span class="p">,</span> <span class="n">C_out</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s1">&#39;Warsaw&#39;</span><span class="p">)</span>
-        <span class="n">SM_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">smeftutil</span><span class="o">.</span><span class="n">SM_keys</span><span class="p">)</span>  <span class="c1"># to speed up lookup</span>
+        <span class="n">SM_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">smeftutil</span><span class="o">.</span><span class="n">dim4_keys</span><span class="p">)</span>  <span class="c1"># to speed up lookup</span>
         <span class="n">C_SM</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C_SM</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">SM_keys</span><span class="p">}</span>
         <span class="c1"># set the Wilson coefficients at the EW scale to C_out</span>
         <span class="n">C_in_sm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
         <span class="n">C_in_sm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">C_SM</span><span class="p">)</span>
         <span class="n">smeft_sm</span><span class="o">.</span><span class="n">_set_initial</span><span class="p">(</span><span class="n">C_in_sm</span><span class="p">,</span> <span class="n">scale_sm</span><span class="p">)</span>
         <span class="c1"># run up (with 1% relative precision, ignore running of Wilson coefficients)</span>
-        <span class="n">C_SM_high</span> <span class="o">=</span> <span class="n">smeft_sm</span><span class="o">.</span><span class="n">_rgevolve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">C_SM_high</span> <span class="o">=</span> <span class="n">smeft_sm</span><span class="o">.</span><span class="n">_rgevolve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">C_SM_high</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rotate_defaultbasis</span><span class="p">(</span><span class="n">C_SM_high</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C_SM_high</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">SM_keys</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">get_smpar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="s1">&#39;integrate&#39;</span><span class="p">,</span> <span class="n">scale_sm</span><span class="o">=</span><span class="mf">91.1876</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the SM MS-bar parameters at the electroweak scale.</span>
+
+<span class="sd">        This method can be used to validate the accuracy of the iterative</span>
+<span class="sd">        extraction of SM parameters. If successful, the values returned by this</span>
+<span class="sd">        method should agree with the values in the dictionary</span>
+<span class="sd">        `wilson.run.smeft.smpar.p`.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">accuracy</span> <span class="o">==</span> <span class="s1">&#39;integrate&#39;</span><span class="p">:</span>
+            <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve</span><span class="p">(</span><span class="n">scale_sm</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">accuracy</span> <span class="o">==</span> <span class="s1">&#39;leadinglog&#39;</span><span class="p">:</span>
+            <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve_leadinglog</span><span class="p">(</span><span class="n">scale_sm</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">&#39; is not a valid value of &#39;accuracy&#39; (must be either &#39;integrate&#39; or &#39;leadinglog&#39;).&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">smpar</span><span class="o">.</span><span class="n">smpar</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_sm_scale_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_sm</span><span class="o">=</span><span class="mf">91.1876</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get an estimate of the SM parameters at the input scale by running</span>
@@ -1483,7 +1513,7 @@ Field Theory and allowing the evolution of the Wilson Coefficients.</p>
 <span class="sd">        Wilson coefficients (the ones affecting the extraction of SM parameters)</span>
 <span class="sd">        are large.&quot;&quot;&quot;</span>
         <span class="c1"># intialize a copy of ourselves</span>
-        <span class="n">_smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">_smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="c1"># Step 1: run the SM up, using the WCs at scale_input as (constant) estimate</span>
         <span class="n">_smeft</span><span class="o">.</span><span class="n">C_in</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_run_sm_scale_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_sm</span><span class="o">=</span><span class="n">scale_sm</span><span class="p">))</span>
         <span class="c1"># Step 2: run the WCs down in LL approximation</span>
@@ -1502,7 +1532,12 @@ Field Theory and allowing the evolution of the Wilson Coefficients.</p>
 <span class="sd">        (&#39;integrate&#39;, the default, slow but precise) or the leading logarithmic</span>
 <span class="sd">        approximation (&#39;leadinglog&#39;, approximate but much faster).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">accuracy</span> <span class="o">==</span> <span class="s1">&#39;integrate&#39;</span><span class="p">:</span>
+            <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">accuracy</span> <span class="o">==</span> <span class="s1">&#39;leadinglog&#39;</span><span class="p">:</span>
+            <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve_leadinglog</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">&#39; is not a valid value of &#39;accuracy&#39; (must be either &#39;integrate&#39; or &#39;leadinglog&#39;).&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_wcxf</span><span class="p">(</span><span class="n">C_out</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">run_continuous</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
@@ -1549,16 +1584,53 @@ Field Theory and allowing the evolution of the Wilson Coefficients.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.run.smeft.classes.SMEFT.__init__', this);">Show source &equiv;</a></p>
   <div id="source-wilson.run.smeft.classes.SMEFT.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Initialize the SMEFT instance.</span>
 <span class="sd">    Parameters:</span>
 <span class="sd">    - `wc`: the Wilson coefficients as `wcxf.WC` instance.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">wc</span> <span class="o">=</span> <span class="n">wc</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="k">if</span> <span class="n">wc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">scale_in</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">C_in</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">wc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_initial_wcxf</span><span class="p">(</span><span class="n">wc</span><span class="p">,</span> <span class="n">get_smpar</span><span class="o">=</span><span class="n">get_smpar</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wilson.run.smeft.classes.SMEFT.get_smpar">
+    <p>def <span class="ident">get_smpar</span>(</p><p>self, accuracy=&#39;integrate&#39;, scale_sm=91.1876)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Compute the SM MS-bar parameters at the electroweak scale.</p>
+<p>This method can be used to validate the accuracy of the iterative
+extraction of SM parameters. If successful, the values returned by this
+method should agree with the values in the dictionary
+<code>wilson.run.smeft.smpar.p</code>.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.run.smeft.classes.SMEFT.get_smpar', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.run.smeft.classes.SMEFT.get_smpar" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_smpar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="s1">&#39;integrate&#39;</span><span class="p">,</span> <span class="n">scale_sm</span><span class="o">=</span><span class="mf">91.1876</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the SM MS-bar parameters at the electroweak scale.</span>
+<span class="sd">    This method can be used to validate the accuracy of the iterative</span>
+<span class="sd">    extraction of SM parameters. If successful, the values returned by this</span>
+<span class="sd">    method should agree with the values in the dictionary</span>
+<span class="sd">    `wilson.run.smeft.smpar.p`.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">accuracy</span> <span class="o">==</span> <span class="s1">&#39;integrate&#39;</span><span class="p">:</span>
+        <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve</span><span class="p">(</span><span class="n">scale_sm</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">accuracy</span> <span class="o">==</span> <span class="s1">&#39;leadinglog&#39;</span><span class="p">:</span>
+        <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve_leadinglog</span><span class="p">(</span><span class="n">scale_sm</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">&#39; is not a valid value of &#39;accuracy&#39; (must be either &#39;integrate&#39; or &#39;leadinglog&#39;).&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">smpar</span><span class="o">.</span><span class="n">smpar</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1596,7 +1668,12 @@ approximation ('leadinglog', approximate but much faster).</li>
 <span class="sd">    (&#39;integrate&#39;, the default, slow but precise) or the leading logarithmic</span>
 <span class="sd">    approximation (&#39;leadinglog&#39;, approximate but much faster).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">accuracy</span> <span class="o">==</span> <span class="s1">&#39;integrate&#39;</span><span class="p">:</span>
+        <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">accuracy</span> <span class="o">==</span> <span class="s1">&#39;leadinglog&#39;</span><span class="p">:</span>
+        <span class="n">C_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rgevolve_leadinglog</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">&#39; is not a valid value of &#39;accuracy&#39; (must be either &#39;integrate&#39; or &#39;leadinglog&#39;).&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_wcxf</span><span class="p">(</span><span class="n">C_out</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
 </pre></div>
 

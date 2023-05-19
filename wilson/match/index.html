@@ -861,8 +861,13 @@ table {
   </style>
 
   <style type="text/css">
-  .codehilite .hll { background-color: #ffffcc }
-.codehilite  { background: #f8f8f8; }
+  pre { line-height: 125%; margin: 0; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
 .codehilite .c { color: #408080; font-style: italic } /* Comment */
 .codehilite .err { border: 1px solid #FF0000 } /* Error */
 .codehilite .k { color: #008000; font-weight: bold } /* Keyword */
@@ -1076,7 +1081,12 @@ table {
     <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
         <li class="mono"><a href="smeft.m.html">wilson.match.smeft</a></li>
+        <li class="mono"><a href="smeft_loop.m.html">wilson.match.smeft_loop</a></li>
+        <li class="mono"><a href="smeft_tree.m.html">wilson.match.smeft_tree</a></li>
+        <li class="mono"><a href="test_smeft_loop.m.html">wilson.match.test_smeft_loop</a></li>
+        <li class="mono"><a href="test_smeft_tree_new.m.html">wilson.match.test_smeft_tree_new</a></li>
         <li class="mono"><a href="test_smeft_wet.m.html">wilson.match.test_smeft_wet</a></li>
+        <li class="mono"><a href="test_symmetryfactors.m.html">wilson.match.test_symmetryfactors</a></li>
         <li class="mono"><a href="test_wet.m.html">wilson.match.test_wet</a></li>
       </ul>
     </li>
@@ -1101,86 +1111,86 @@ can be used with the <code>wcxf</code> Python package.</p>
 <span class="sd">can be used with the `wcxf` Python package.&quot;&quot;&quot;</span>
 
 
-<span class="kn">import</span> <span class="nn">wcxf</span>
+<span class="kn">from</span> <span class="nn">wilson</span> <span class="kn">import</span> <span class="n">wcxf</span>
 <span class="kn">import</span> <span class="nn">wilson</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">smeft</span>
 
 
-<span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">warsaw_up_to_jms</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">warsaw_to_jms</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">C_warsawup</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">warsaw_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">C_warsawup</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">C_JMS</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">warsaw_up_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">C_JMS</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;EOS&#39;</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;EOS&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">warsaw_to_eos</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">C_warsawup</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">JMS_to_EOS</span><span class="p">(</span><span class="n">C_JMS</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">warsaw_to_bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">C_warsawup</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">C_JMS</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 
 
-<span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet_wet4_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
 
 
-<span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet4_wet3_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
 
 
-<span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet_wet4_bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
 
 
-<span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet4_wet3_bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
 
 
-<span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet_wet4_jms</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
 
 
-<span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet4_wet3_jms</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
 
 
-<span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-2&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+<span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-2&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet3_wet2_jms</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-2&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
@@ -1205,10 +1215,10 @@ can be used with the <code>wcxf</code> Python package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.match.warsaw_to_bern', this);">Show source &equiv;</a></p>
   <div id="source-wilson.match.warsaw_to_bern" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">warsaw_to_bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">C_warsawup</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">JMS_to_Bern</span><span class="p">(</span><span class="n">C_JMS</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 </pre></div>
 
@@ -1229,10 +1239,10 @@ can be used with the <code>wcxf</code> Python package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.match.warsaw_to_eos', this);">Show source &equiv;</a></p>
   <div id="source-wilson.match.warsaw_to_eos" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;EOS&#39;</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;EOS&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">warsaw_to_eos</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">C_warsawup</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">JMS_to_EOS</span><span class="p">(</span><span class="n">C_JMS</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 </pre></div>
 
@@ -1253,10 +1263,10 @@ can be used with the <code>wcxf</code> Python package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.match.warsaw_to_flavio', this);">Show source &equiv;</a></p>
   <div id="source-wilson.match.warsaw_to_flavio" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">warsaw_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">C_warsawup</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">C_JMS</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 </pre></div>
 
@@ -1277,10 +1287,10 @@ can be used with the <code>wcxf</code> Python package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.match.warsaw_to_jms', this);">Show source &equiv;</a></p>
   <div id="source-wilson.match.warsaw_to_jms" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">warsaw_to_jms</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">C_warsawup</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">warsaw_to_warsaw_up</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C_warsawup</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1300,9 +1310,9 @@ can be used with the <code>wcxf</code> Python package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.match.warsaw_up_to_flavio', this);">Show source &equiv;</a></p>
   <div id="source-wilson.match.warsaw_up_to_flavio" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">warsaw_up_to_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="n">C_JMS</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wilson</span><span class="o">.</span><span class="n">translate</span><span class="o">.</span><span class="n">JMS_to_flavio</span><span class="p">(</span><span class="n">C_JMS</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 </pre></div>
 
@@ -1323,9 +1333,9 @@ can be used with the <code>wcxf</code> Python package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.match.warsaw_up_to_jms', this);">Show source &equiv;</a></p>
   <div id="source-wilson.match.warsaw_up_to_jms" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="s1">&#39;Warsaw up&#39;</span><span class="p">,</span> <span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">warsaw_up_to_jms</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">smeft</span><span class="o">.</span><span class="n">match_all</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1345,7 +1355,7 @@ can be used with the <code>wcxf</code> Python package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.match.wet3_wet2_jms', this);">Show source &equiv;</a></p>
   <div id="source-wilson.match.wet3_wet2_jms" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-2&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-2&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet3_wet2_jms</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-2&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
@@ -1368,7 +1378,7 @@ can be used with the <code>wcxf</code> Python package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.match.wet4_wet3_bern', this);">Show source &equiv;</a></p>
   <div id="source-wilson.match.wet4_wet3_bern" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet4_wet3_bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
@@ -1391,7 +1401,7 @@ can be used with the <code>wcxf</code> Python package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.match.wet4_wet3_flavio', this);">Show source &equiv;</a></p>
   <div id="source-wilson.match.wet4_wet3_flavio" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet4_wet3_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
@@ -1414,7 +1424,7 @@ can be used with the <code>wcxf</code> Python package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.match.wet4_wet3_jms', this);">Show source &equiv;</a></p>
   <div id="source-wilson.match.wet4_wet3_jms" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet4_wet3_jms</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
@@ -1437,7 +1447,7 @@ can be used with the <code>wcxf</code> Python package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.match.wet_wet4_bern', this);">Show source &equiv;</a></p>
   <div id="source-wilson.match.wet_wet4_bern" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet_wet4_bern</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;Bern&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
@@ -1460,7 +1470,7 @@ can be used with the <code>wcxf</code> Python package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.match.wet_wet4_flavio', this);">Show source &equiv;</a></p>
   <div id="source-wilson.match.wet_wet4_flavio" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet_wet4_flavio</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;flavio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
@@ -1483,7 +1493,7 @@ can be used with the <code>wcxf</code> Python package.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.match.wet_wet4_jms', this);">Show source &equiv;</a></p>
   <div id="source-wilson.match.wet_wet4_jms" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@wcxf.matcher</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@wcxf</span><span class="o">.</span><span class="n">matcher</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wet_wet4_jms</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wcxf</span><span class="o">.</span><span class="n">Basis</span><span class="p">[</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">all_wcs</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
@@ -1502,11 +1512,45 @@ can be used with the <code>wcxf</code> Python package.</p>
       
   
     <div class="desc"><p>Matcher from the SMEFT 'Warsaw up' basis to the WET JMS basis.</p>
-<p>Based on arXiv:1709.04486.</p></div>
+<p>Based on arXiv:1908.05295.</p></div>
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="smeft_loop.m.html">wilson.match.smeft_loop</a></p>
+      
+  
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="smeft_tree.m.html">wilson.match.smeft_tree</a></p>
+      
+  
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="test_smeft_loop.m.html">wilson.match.test_smeft_loop</a></p>
+      
+  
+    <div class="desc"><p>Compare the 1-loop SMEFT matching based on aXiv:1908.05295
+numerically to the Mathematica code provided by the authors.</p></div>
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="test_smeft_tree_new.m.html">wilson.match.test_smeft_tree_new</a></p>
+      
+  
+    <div class="desc"><p>Compare the new tree-level SMEFT matching based on aXiv:1908.05295
+to the old one based on arXiv:1709.04486.</p></div>
 
       </div>
       <div class="item">
       <p class="name"><a href="test_smeft_wet.m.html">wilson.match.test_smeft_wet</a></p>
+      
+  
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="test_symmetryfactors.m.html">wilson.match.test_symmetryfactors</a></p>
       
   
 

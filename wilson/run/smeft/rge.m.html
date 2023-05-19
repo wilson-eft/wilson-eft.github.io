@@ -860,8 +860,13 @@ table {
   </style>
 
   <style type="text/css">
-  .codehilite .hll { background-color: #ffffcc }
-.codehilite  { background: #f8f8f8; }
+  pre { line-height: 125%; margin: 0; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
 .codehilite .c { color: #408080; font-style: italic } /* Comment */
 .codehilite .err { border: 1px solid #FF0000 } /* Error */
 .codehilite .k { color: #008000; font-weight: bold } /* Keyword */
@@ -1092,54 +1097,53 @@ table {
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">log</span>
 <span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">solve_ivp</span>
-<span class="kn">from</span> <span class="nn">wilson.run.smeft.beta</span> <span class="kn">import</span> <span class="n">C_array2dict</span>
-<span class="kn">from</span> <span class="nn">wilson.translate.smeft</span> <span class="kn">import</span> <span class="n">arrays2wcxf</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">wilson.util</span> <span class="kn">import</span> <span class="n">smeftutil</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<span class="k">def</span> <span class="nf">smeft_evolve_leadinglog</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">smeft_evolve_leadinglog</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Solve the SMEFT RGEs in the leading log approximation.</span>
 
 <span class="sd">    Input C_in and output C_out are dictionaries of arrays.&quot;&quot;&quot;</span>
     <span class="n">C_out</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">C_in</span><span class="p">)</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">beta</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="n">newphys</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">beta</span><span class="p">(</span><span class="n">C_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="n">newphys</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">C</span> <span class="ow">in</span> <span class="n">C_out</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">C_out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="mi">16</span> <span class="o">*</span> <span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">scale_out</span> <span class="o">/</span> <span class="n">scale_in</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">C_out</span>
 
 
-<span class="k">def</span> <span class="nf">_smeft_evolve</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_smeft_evolve</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Axuliary function used in `smeft_evolve` and `smeft_evolve_continuous`&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">beta</span><span class="o">.</span><span class="n">beta_array</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">beta</span><span class="o">.</span><span class="n">C_array2dict</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">complex</span><span class="p">)),</span>
+        <span class="k">return</span> <span class="n">beta</span><span class="o">.</span><span class="n">beta_array</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">smeftutil</span><span class="o">.</span><span class="n">C_array2dict</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">complex</span><span class="p">)),</span>
                                <span class="n">newphys</span><span class="o">=</span><span class="n">newphys</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">16</span> <span class="o">*</span> <span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">y0</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">C_dict2array</span><span class="p">(</span><span class="n">C_in</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">y0</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">C_dict2array</span><span class="p">(</span><span class="n">C_in</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">sol</span> <span class="o">=</span> <span class="n">solve_ivp</span><span class="p">(</span><span class="n">fun</span><span class="o">=</span><span class="n">fun</span><span class="p">,</span>
                     <span class="n">t_span</span><span class="o">=</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">scale_in</span><span class="p">),</span> <span class="n">log</span><span class="p">(</span><span class="n">scale_out</span><span class="p">)),</span>
                     <span class="n">y0</span><span class="o">=</span><span class="n">y0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">sol</span>
 
 
-<span class="k">def</span> <span class="nf">smeft_evolve</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">smeft_evolve</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Solve the SMEFT RGEs by numeric integration.</span>
 
 <span class="sd">    Input C_in and output C_out are dictionaries of arrays.&quot;&quot;&quot;</span>
     <span class="n">sol</span> <span class="o">=</span> <span class="n">_smeft_evolve</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="n">newphys</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">beta</span><span class="o">.</span><span class="n">C_array2dict</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">complex</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">C_array2dict</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">complex</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">smeft_evolve_continuous</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">smeft_evolve_continuous</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Solve the SMEFT RGEs by numeric integration, returning a function that</span>
 <span class="sd">    allows to compute an interpolated solution at arbitrary intermediate</span>
 <span class="sd">    scales.&quot;&quot;&quot;</span>
     <span class="n">sol</span> <span class="o">=</span> <span class="n">_smeft_evolve</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="n">newphys</span><span class="p">,</span>
-                        <span class="n">dense_output</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="nd">@np.vectorize</span>
+                        <span class="n">dense_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
     <span class="k">def</span> <span class="nf">_rge_solution</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">sol</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
-        <span class="n">yd</span> <span class="o">=</span> <span class="n">C_array2dict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">yw</span> <span class="o">=</span> <span class="n">arrays2wcxf</span><span class="p">(</span><span class="n">yd</span><span class="p">)</span>
+        <span class="n">yd</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">C_array2dict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">yw</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">arrays2wcxf_nonred</span><span class="p">(</span><span class="n">yd</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">yw</span>
     <span class="k">def</span> <span class="nf">rge_solution</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
         <span class="c1"># this is to return a scalar if the input is scalar</span>
@@ -1177,12 +1181,12 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.run.smeft.rge.smeft_evolve', this);">Show source &equiv;</a></p>
   <div id="source-wilson.run.smeft.rge.smeft_evolve" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">smeft_evolve</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">smeft_evolve</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Solve the SMEFT RGEs by numeric integration.</span>
 
 <span class="sd">    Input C_in and output C_out are dictionaries of arrays.&quot;&quot;&quot;</span>
     <span class="n">sol</span> <span class="o">=</span> <span class="n">_smeft_evolve</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="n">newphys</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">beta</span><span class="o">.</span><span class="n">C_array2dict</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">complex</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">C_array2dict</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">complex</span><span class="p">))</span>
 </pre></div>
 
   </div>
@@ -1205,18 +1209,18 @@ scales.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.run.smeft.rge.smeft_evolve_continuous', this);">Show source &equiv;</a></p>
   <div id="source-wilson.run.smeft.rge.smeft_evolve_continuous" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">smeft_evolve_continuous</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">smeft_evolve_continuous</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Solve the SMEFT RGEs by numeric integration, returning a function that</span>
 <span class="sd">    allows to compute an interpolated solution at arbitrary intermediate</span>
 <span class="sd">    scales.&quot;&quot;&quot;</span>
     <span class="n">sol</span> <span class="o">=</span> <span class="n">_smeft_evolve</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="n">newphys</span><span class="p">,</span>
-                        <span class="n">dense_output</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="nd">@np.vectorize</span>
+                        <span class="n">dense_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
     <span class="k">def</span> <span class="nf">_rge_solution</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">sol</span><span class="o">.</span><span class="n">sol</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
-        <span class="n">yd</span> <span class="o">=</span> <span class="n">C_array2dict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">yw</span> <span class="o">=</span> <span class="n">arrays2wcxf</span><span class="p">(</span><span class="n">yd</span><span class="p">)</span>
+        <span class="n">yd</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">C_array2dict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">yw</span> <span class="o">=</span> <span class="n">smeftutil</span><span class="o">.</span><span class="n">arrays2wcxf_nonred</span><span class="p">(</span><span class="n">yd</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">yw</span>
     <span class="k">def</span> <span class="nf">rge_solution</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
         <span class="c1"># this is to return a scalar if the input is scalar</span>
@@ -1243,12 +1247,12 @@ scales.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.run.smeft.rge.smeft_evolve_leadinglog', this);">Show source &equiv;</a></p>
   <div id="source-wilson.run.smeft.rge.smeft_evolve_leadinglog" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">smeft_evolve_leadinglog</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">smeft_evolve_leadinglog</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">scale_in</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Solve the SMEFT RGEs in the leading log approximation.</span>
 
 <span class="sd">    Input C_in and output C_out are dictionaries of arrays.&quot;&quot;&quot;</span>
     <span class="n">C_out</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">C_in</span><span class="p">)</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">beta</span><span class="p">(</span><span class="n">C_in</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="n">newphys</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">beta</span><span class="p">(</span><span class="n">C_out</span><span class="p">,</span> <span class="n">newphys</span><span class="o">=</span><span class="n">newphys</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">C</span> <span class="ow">in</span> <span class="n">C_out</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">C_out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="mi">16</span> <span class="o">*</span> <span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">scale_out</span> <span class="o">/</span> <span class="n">scale_in</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">C_out</span>

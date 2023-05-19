@@ -862,8 +862,13 @@ table {
   </style>
 
   <style type="text/css">
-  .codehilite .hll { background-color: #ffffcc }
-.codehilite  { background: #f8f8f8; }
+  pre { line-height: 125%; margin: 0; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
 .codehilite .c { color: #408080; font-style: italic } /* Comment */
 .codehilite .err { border: 1px solid #FF0000 } /* Error */
 .codehilite .k { color: #008000; font-weight: bold } /* Keyword */
@@ -1064,6 +1069,18 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
+        <span class="class_name"><a href="#wilson.classes.ConfigurableClass">ConfigurableClass</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#wilson.classes.ConfigurableClass.__init__">__init__</a></li>
+    <li class="mono"><a href="#wilson.classes.ConfigurableClass.get_option">get_option</a></li>
+    <li class="mono"><a href="#wilson.classes.ConfigurableClass.set_option">set_option</a></li>
+    <li class="mono"><a href="#wilson.classes.ConfigurableClass.set_default_option">set_default_option</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
         <span class="class_name"><a href="#wilson.classes.RGsolution">RGsolution</a></span>
         
           
@@ -1080,9 +1097,13 @@ table {
           
   <ul>
     <li class="mono"><a href="#wilson.classes.Wilson.__init__">__init__</a></li>
+    <li class="mono"><a href="#wilson.classes.Wilson.clear_cache">clear_cache</a></li>
+    <li class="mono"><a href="#wilson.classes.Wilson.get_option">get_option</a></li>
     <li class="mono"><a href="#wilson.classes.Wilson.match_run">match_run</a></li>
+    <li class="mono"><a href="#wilson.classes.Wilson.set_option">set_option</a></li>
     <li class="mono"><a href="#wilson.classes.Wilson.from_wc">from_wc</a></li>
     <li class="mono"><a href="#wilson.classes.Wilson.load_wc">load_wc</a></li>
+    <li class="mono"><a href="#wilson.classes.Wilson.set_default_option">set_default_option</a></li>
   </ul>
 
         </li>
@@ -1121,12 +1142,60 @@ SMEFT and WET RGEs to be used for plotting.</p>
 
 <span class="kn">from</span> <span class="nn">wilson.run.smeft</span> <span class="kn">import</span> <span class="n">SMEFT</span>
 <span class="kn">from</span> <span class="nn">wilson.run.wet</span> <span class="kn">import</span> <span class="n">WETrunner</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">wilson</span> <span class="kn">import</span> <span class="n">parameters</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">e</span>
-<span class="kn">import</span> <span class="nn">wcxf</span>
+<span class="kn">from</span> <span class="nn">wilson</span> <span class="kn">import</span> <span class="n">wcxf</span>
+<span class="kn">import</span> <span class="nn">voluptuous</span> <span class="k">as</span> <span class="nn">vol</span>
+
+<span class="k">class</span> <span class="nc">ConfigurableClass</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class that provides the functionality to set and get configuration</span>
+<span class="sd">    options.</span>
+
+<span class="sd">    Methods:</span>
+
+<span class="sd">    - `set_option`: Set configuration option</span>
+<span class="sd">    - `get_option`: Show configuration option</span>
+<span class="sd">    - `set_default_option`: Class method! Set deault configuration option</span>
+<span class="sd">      affecting only future instances of the class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># default config options:</span>
+    <span class="c1"># dictionary with option name as &#39;key&#39; and default option value as &#39;value&#39;</span>
+    <span class="n">_default_options</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># option schema:</span>
+    <span class="c1"># Voluptuous schema defining allowed option values/types</span>
+    <span class="n">_option_schema</span> <span class="o">=</span> <span class="n">vol</span><span class="o">.</span><span class="n">Schema</span><span class="p">({})</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_options</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_default_option</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Class method. Set the default value of the option `key` (string)</span>
+<span class="sd">        to `value` for all future instances of the class.</span>
+
+<span class="sd">        Note that this does not affect existing instances or the instance</span>
+<span class="sd">        called from.&quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_default_options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_option_schema</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">}))</span>
+
+    <span class="k">def</span> <span class="nf">set_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the option `key` (string) to `value`.</span>
+
+<span class="sd">        Instance method, affects only current instance.</span>
+<span class="sd">        This will clear the cache.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_option_schema</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">}))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_cache</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the current value of the option `key` (string).</span>
+
+<span class="sd">        Instance method, only refers to current instance.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_options</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 
 
-<span class="k">class</span> <span class="nc">Wilson</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Wilson</span><span class="p">(</span><span class="n">ConfigurableClass</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Main interface to the wilson package, providing automatic running</span>
 <span class="sd">    and matching in SMEFT and WET.</span>
 
@@ -1137,7 +1206,37 @@ SMEFT and WET RGEs to be used for plotting.</p>
 <span class="sd">    - `from_wc`: Return a `Wilson` instance initialized by a `wcxf.WC` instance</span>
 <span class="sd">    - `load_wc`: Return a `Wilson` instance initialized by a WCxf file-like object</span>
 <span class="sd">    - `match_run`: Run the Wilson coefficients to a different scale (and possibly different EFT) and return them as `wcxf.WC` instance</span>
+<span class="sd">    - `set_option`: Set configuration option</span>
+<span class="sd">    - `get_option`: Show configuration option</span>
+<span class="sd">    - `set_default_option`: Class method! Set deault configuration option</span>
+<span class="sd">      affecting only future instances of the class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># default config options:</span>
+    <span class="c1"># dictionary with option name as &#39;key&#39; and default option value as &#39;value&#39;</span>
+    <span class="n">_default_options</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;smeft_accuracy&#39;</span><span class="p">:</span> <span class="s1">&#39;integrate&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;qed_order&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="s1">&#39;qcd_order&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="s1">&#39;smeft_matching_order&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="s1">&#39;smeft_matchingscale&#39;</span><span class="p">:</span> <span class="mf">91.1876</span><span class="p">,</span>
+                        <span class="s1">&#39;mb_matchingscale&#39;</span><span class="p">:</span> <span class="mf">4.2</span><span class="p">,</span>
+                        <span class="s1">&#39;mc_matchingscale&#39;</span><span class="p">:</span> <span class="mf">1.3</span><span class="p">,</span>
+                        <span class="s1">&#39;parameters&#39;</span><span class="p">:</span> <span class="p">{},</span>
+                        <span class="p">}</span>
+
+    <span class="c1"># option schema:</span>
+    <span class="c1"># Voluptuous schema defining allowed option values/types</span>
+    <span class="n">_option_schema</span> <span class="o">=</span> <span class="n">vol</span><span class="o">.</span><span class="n">Schema</span><span class="p">({</span>
+        <span class="s1">&#39;smeft_accuracy&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">In</span><span class="p">([</span><span class="s1">&#39;integrate&#39;</span><span class="p">,</span><span class="s1">&#39;leadinglog&#39;</span><span class="p">]),</span>
+        <span class="s1">&#39;qed_order&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">In</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="s1">&#39;qcd_order&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">In</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="s1">&#39;smeft_matching_order&#39;</span><span class="p">:</span>  <span class="n">vol</span><span class="o">.</span><span class="n">In</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="s1">&#39;smeft_matchingscale&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">Coerce</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span>
+        <span class="s1">&#39;mb_matchingscale&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">Coerce</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span>
+        <span class="s1">&#39;mc_matchingscale&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">Coerce</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span>
+        <span class="s1">&#39;parameters&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">Schema</span><span class="p">({</span><span class="n">vol</span><span class="o">.</span><span class="n">Extra</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">Coerce</span><span class="p">(</span><span class="nb">float</span><span class="p">)}),</span>
+    <span class="p">})</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wcdict</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the `Wilson` class.</span>
 
@@ -1151,10 +1250,17 @@ SMEFT and WET RGEs to be used for plotting.</p>
 <span class="sd">        - `eft`: input EFT</span>
 <span class="sd">        - `basis`: input basis</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wc</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="p">(</span><span class="n">eft</span><span class="o">=</span><span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="n">basis</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span>
                           <span class="n">values</span><span class="o">=</span><span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="o">.</span><span class="n">dict2values</span><span class="p">(</span><span class="n">wcdict</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a hash of the `Wilson` instance.</span>
+<span class="sd">        The hash changes when Wilson coefficient values or options are modified.</span>
+<span class="sd">        It assumes that `wcxf.WC` instances are not modified after instantiation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">)))</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_wc</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">wc</span><span class="p">):</span>
@@ -1174,6 +1280,31 @@ SMEFT and WET RGEs to be used for plotting.</p>
         <span class="n">html</span> <span class="o">+=</span> <span class="n">r_wcxf</span>
         <span class="k">return</span> <span class="n">html</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parameters to be used for running and translation.&quot;&quot;&quot;</span>
+        <span class="c1"># start with a copy of the default parameters</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># overwrite by the user defined parameters, if any</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;parameters&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">p</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">matching_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parameters to be used for the SMEFT-&gt;WET matching.&quot;&quot;&quot;</span>
+        <span class="c1"># start with a copy of the numerical parameters</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># properly set &#39;loop_order&#39; for `match.smeft.match_all`</span>
+        <span class="n">p</span><span class="p">[</span><span class="s1">&#39;loop_order&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;smeft_matching_order&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">p</span>
+
+
+    <span class="k">def</span> <span class="nf">_wetrun_opt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a dictionary of options to pass to a `run.wet.WETrunner`</span>
+<span class="sd">        instance.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;qed_order&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;qed_order&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;qcd_order&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;qcd_order&#39;</span><span class="p">)}</span>
+
     <span class="k">def</span> <span class="nf">match_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run the Wilson coefficients to a different scale</span>
 <span class="sd">        (and possibly different EFT)</span>
@@ -1191,58 +1322,74 @@ SMEFT and WET RGEs to be used for plotting.</p>
 <span class="sd">          is of interest. The sector names are defined in the WCxf basis file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cached</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_from_cache</span><span class="p">(</span><span class="n">sector</span><span class="o">=</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="o">=</span><span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="n">basis</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">cached</span>
-        <span class="n">scale_ew</span> <span class="o">=</span> <span class="mf">91.1876</span>
-        <span class="n">mb</span> <span class="o">=</span> <span class="mf">4.2</span>
-        <span class="n">mc</span> <span class="o">=</span> <span class="mf">1.3</span>
+        <span class="k">if</span> <span class="n">sectors</span>  <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+            <span class="c1"># the default value for sectors is &quot;None&quot; for translators</span>
+            <span class="n">translate_sectors</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">translate_sectors</span> <span class="o">=</span> <span class="n">sectors</span>
+        <span class="n">scale_ew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;smeft_matchingscale&#39;</span><span class="p">)</span>
+        <span class="n">mb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;mb_matchingscale&#39;</span><span class="p">)</span>
+        <span class="n">mc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;mc_matchingscale&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">basis</span> <span class="o">==</span> <span class="n">basis</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="n">eft</span> <span class="ow">and</span> <span class="n">scale</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scale</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span>  <span class="c1"># nothing to do</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="n">eft</span> <span class="ow">and</span> <span class="n">scale</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scale</span><span class="p">:</span>
+            <span class="n">wc_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>  <span class="c1"># only translation necessary</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">wc_out</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;SMEFT&#39;</span><span class="p">:</span>
+            <span class="n">smeft_accuracy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;smeft_accuracy&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;SMEFT&#39;</span><span class="p">:</span>
-                <span class="n">smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">)</span>
+                <span class="n">smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">))</span>
                 <span class="c1"># if input and output EFT ist SMEFT, just run.</span>
-                <span class="n">wc_out</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+                <span class="n">wc_out</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="n">smeft_accuracy</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="n">wc_out</span><span class="o">.</span><span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">wc_out</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># if SMEFT -&gt; WET-x: match to WET at the EW scale</span>
                 <span class="n">wc_ew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_from_cache</span><span class="p">(</span><span class="n">sector</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale_ew</span><span class="p">,</span> <span class="n">eft</span><span class="o">=</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">wc_ew</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                    <span class="n">smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">)</span>
-                    <span class="n">wc_ew</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale_ew</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">wc_ew</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scale</span> <span class="o">==</span> <span class="n">scale_ew</span><span class="p">:</span>
+                        <span class="n">wc_ew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>  <span class="c1"># no need to run</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">))</span>
+                        <span class="n">wc_ew</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale_ew</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="n">smeft_accuracy</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">scale_ew</span><span class="p">,</span> <span class="n">wc_ew</span><span class="o">.</span><span class="n">eft</span><span class="p">,</span> <span class="n">wc_ew</span><span class="o">.</span><span class="n">basis</span><span class="p">,</span> <span class="n">wc_ew</span><span class="p">)</span>
-                <span class="n">wet</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_ew</span><span class="p">)</span>
+                <span class="n">wet</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_ew</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">]:</span>
-            <span class="n">wet</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;JMS&#39;</span><span class="p">))</span>
+            <span class="n">wet</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">),</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input EFT {} unknown or not supported&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input EFT </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span><span class="si">}</span><span class="s2"> unknown or not supported&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">eft</span> <span class="o">==</span> <span class="n">wet</span><span class="o">.</span><span class="n">eft</span><span class="p">:</span>  <span class="c1"># just run</span>
-            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">wc_out</span>
         <span class="k">elif</span> <span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET-4&#39;</span> <span class="ow">and</span> <span class="n">wet</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET&#39;</span><span class="p">:</span>  <span class="c1"># match at mb</span>
-            <span class="n">wc_mb</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-            <span class="n">wet4</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mb</span><span class="p">)</span>
-            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet4</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+            <span class="n">wc_mb</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
+            <span class="n">wet4</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mb</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
+            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet4</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">wc_out</span>
         <span class="k">elif</span> <span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET-3&#39;</span> <span class="ow">and</span> <span class="n">wet</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">:</span>  <span class="c1"># match at mc</span>
-            <span class="n">wc_mc</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-            <span class="n">wet3</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mc</span><span class="p">)</span>
-            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet3</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+            <span class="n">wc_mc</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
+            <span class="n">wet3</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mc</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
+            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet3</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">wc_out</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET-3&#39;</span> <span class="ow">and</span> <span class="n">wet</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET&#39;</span><span class="p">:</span>  <span class="c1"># match at mb and mc</span>
-            <span class="n">wc_mb</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-            <span class="n">wet4</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mb</span><span class="p">)</span>
-            <span class="n">wc_mc</span> <span class="o">=</span> <span class="n">wet4</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-            <span class="n">wet3</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mc</span><span class="p">)</span>
-            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet3</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+            <span class="n">wc_mb</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
+            <span class="n">wet4</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mb</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
+            <span class="n">wc_mc</span> <span class="o">=</span> <span class="n">wet4</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
+            <span class="n">wet3</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mc</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
+            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet3</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">wc_out</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Running from {} to {} not implemented&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">wet</span><span class="o">.</span><span class="n">eft</span><span class="p">,</span> <span class="n">eft</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running from </span><span class="si">{</span><span class="n">wet</span><span class="o">.</span><span class="n">eft</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">eft</span><span class="si">}</span><span class="s2"> not implemented&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">clear_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">def</span> <span class="nf">_get_from_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sector</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Try to load a set of Wilson coefficients from the cache, else return</span>
@@ -1250,7 +1397,7 @@ SMEFT and WET RGEs to be used for plotting.</p>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">eft</span><span class="p">][</span><span class="n">scale</span><span class="p">][</span><span class="n">basis</span><span class="p">][</span><span class="n">sector</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">None</span>
+            <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_set_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sector</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">eft</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
@@ -1263,7 +1410,7 @@ SMEFT and WET RGEs to be used for plotting.</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">eft</span><span class="p">][</span><span class="n">scale</span><span class="p">][</span><span class="n">basis</span><span class="p">][</span><span class="n">sector</span><span class="p">]</span> <span class="o">=</span> <span class="n">wc_out</span>
 
 
-<span class="k">class</span> <span class="nc">RGsolution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">RGsolution</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class representing a continuous (interpolated) solution to the</span>
 <span class="sd">    SMEFT RGEs to be used for plotting.&quot;&quot;&quot;</span>
 
@@ -1271,7 +1418,7 @@ SMEFT and WET RGEs to be used for plotting.</p>
         <span class="sd">&quot;&quot;&quot;Initialize.</span>
 
 <span class="sd">        Parameters:</span>
-<span class="sd">        </span>
+
 <span class="sd">        - fun: function of the scale that is expected to return a</span>
 <span class="sd">        dictionary with the RGE solution and to accept vectorized input.</span>
 <span class="sd">        - scale_min, scale_max: lower and upper boundaries of the scale</span>
@@ -1309,7 +1456,7 @@ SMEFT and WET RGEs to be used for plotting.</p>
         <span class="k">elif</span> <span class="n">part</span> <span class="o">==</span> <span class="s1">&#39;im&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">imag</span>
 
-    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">part</span><span class="o">=</span><span class="s1">&#39;re&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">plotargs</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">part</span><span class="o">=</span><span class="s1">&#39;re&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plotargs</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">&quot;&quot;&quot;Plot the RG evolution of parameter `key`.</span>
 
 <span class="sd">        Parameters:</span>
@@ -1319,7 +1466,7 @@ SMEFT and WET RGEs to be used for plotting.</p>
 <span class="sd">        - plotargs: dictionary of arguments to be passed to plt.plot</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+            <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Please install matplotlib if you want to use the plot method&quot;</span><span class="p">)</span>
         <span class="n">pdat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotdata</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">part</span><span class="o">=</span><span class="n">part</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
@@ -1349,6 +1496,189 @@ SMEFT and WET RGEs to be used for plotting.</p>
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
+      <p id="wilson.classes.ConfigurableClass" class="name">class <span class="ident">ConfigurableClass</span></p>
+      
+  
+    <div class="desc"><p>Class that provides the functionality to set and get configuration
+options.</p>
+<p>Methods:</p>
+<ul>
+<li><code>set_option</code>: Set configuration option</li>
+<li><code>get_option</code>: Show configuration option</li>
+<li><code>set_default_option</code>: Class method! Set deault configuration option
+  affecting only future instances of the class.</li>
+</ul></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.classes.ConfigurableClass', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.classes.ConfigurableClass" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ConfigurableClass</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class that provides the functionality to set and get configuration</span>
+<span class="sd">    options.</span>
+
+<span class="sd">    Methods:</span>
+
+<span class="sd">    - `set_option`: Set configuration option</span>
+<span class="sd">    - `get_option`: Show configuration option</span>
+<span class="sd">    - `set_default_option`: Class method! Set deault configuration option</span>
+<span class="sd">      affecting only future instances of the class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># default config options:</span>
+    <span class="c1"># dictionary with option name as &#39;key&#39; and default option value as &#39;value&#39;</span>
+    <span class="n">_default_options</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># option schema:</span>
+    <span class="c1"># Voluptuous schema defining allowed option values/types</span>
+    <span class="n">_option_schema</span> <span class="o">=</span> <span class="n">vol</span><span class="o">.</span><span class="n">Schema</span><span class="p">({})</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_options</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_default_option</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Class method. Set the default value of the option `key` (string)</span>
+<span class="sd">        to `value` for all future instances of the class.</span>
+
+<span class="sd">        Note that this does not affect existing instances or the instance</span>
+<span class="sd">        called from.&quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_default_options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_option_schema</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">}))</span>
+
+    <span class="k">def</span> <span class="nf">set_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the option `key` (string) to `value`.</span>
+
+<span class="sd">        Instance method, affects only current instance.</span>
+<span class="sd">        This will clear the cache.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_option_schema</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">}))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_cache</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the current value of the option `key` (string).</span>
+
+<span class="sd">        Instance method, only refers to current instance.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_options</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#wilson.classes.ConfigurableClass">ConfigurableClass</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="wilson.classes.ConfigurableClass.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Initialize self.  See help(type(self)) for accurate signature.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.classes.ConfigurableClass.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.classes.ConfigurableClass.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_options</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wilson.classes.ConfigurableClass.get_option">
+    <p>def <span class="ident">get_option</span>(</p><p>self, key)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return the current value of the option <code>key</code> (string).</p>
+<p>Instance method, only refers to current instance.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.classes.ConfigurableClass.get_option', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.classes.ConfigurableClass.get_option" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the current value of the option `key` (string).</span>
+<span class="sd">    Instance method, only refers to current instance.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_options</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wilson.classes.ConfigurableClass.set_option">
+    <p>def <span class="ident">set_option</span>(</p><p>self, key, value)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Set the option <code>key</code> (string) to <code>value</code>.</p>
+<p>Instance method, affects only current instance.
+This will clear the cache.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.classes.ConfigurableClass.set_option', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.classes.ConfigurableClass.set_option" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set the option `key` (string) to `value`.</span>
+<span class="sd">    Instance method, affects only current instance.</span>
+<span class="sd">    This will clear the cache.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_option_schema</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">}))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">clear_cache</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="wilson.classes.ConfigurableClass.set_default_option">
+    <p>def <span class="ident">set_default_option</span>(</p><p>cls, key, value)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Class method. Set the default value of the option <code>key</code> (string)
+to <code>value</code> for all future instances of the class.</p>
+<p>Note that this does not affect existing instances or the instance
+called from.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.classes.ConfigurableClass.set_default_option', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.classes.ConfigurableClass.set_default_option" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">set_default_option</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class method. Set the default value of the option `key` (string)</span>
+<span class="sd">    to `value` for all future instances of the class.</span>
+<span class="sd">    Note that this does not affect existing instances or the instance</span>
+<span class="sd">    called from.&quot;&quot;&quot;</span>
+    <span class="bp">cls</span><span class="o">.</span><span class="n">_default_options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_option_schema</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">}))</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
       <p id="wilson.classes.RGsolution" class="name">class <span class="ident">RGsolution</span></p>
       
   
@@ -1357,7 +1687,7 @@ SMEFT RGEs to be used for plotting.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.classes.RGsolution', this);">Show source &equiv;</a></p>
   <div id="source-wilson.classes.RGsolution" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">RGsolution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">RGsolution</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class representing a continuous (interpolated) solution to the</span>
 <span class="sd">    SMEFT RGEs to be used for plotting.&quot;&quot;&quot;</span>
 
@@ -1365,7 +1695,7 @@ SMEFT RGEs to be used for plotting.</p></div>
         <span class="sd">&quot;&quot;&quot;Initialize.</span>
 
 <span class="sd">        Parameters:</span>
-<span class="sd">        </span>
+
 <span class="sd">        - fun: function of the scale that is expected to return a</span>
 <span class="sd">        dictionary with the RGE solution and to accept vectorized input.</span>
 <span class="sd">        - scale_min, scale_max: lower and upper boundaries of the scale</span>
@@ -1403,7 +1733,7 @@ SMEFT RGEs to be used for plotting.</p></div>
         <span class="k">elif</span> <span class="n">part</span> <span class="o">==</span> <span class="s1">&#39;im&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">imag</span>
 
-    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">part</span><span class="o">=</span><span class="s1">&#39;re&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">plotargs</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">part</span><span class="o">=</span><span class="s1">&#39;re&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plotargs</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">&quot;&quot;&quot;Plot the RG evolution of parameter `key`.</span>
 
 <span class="sd">        Parameters:</span>
@@ -1413,7 +1743,7 @@ SMEFT RGEs to be used for plotting.</p></div>
 <span class="sd">        - plotargs: dictionary of arguments to be passed to plt.plot</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+            <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Please install matplotlib if you want to use the plot method&quot;</span><span class="p">)</span>
         <span class="n">pdat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotdata</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">part</span><span class="o">=</span><span class="n">part</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
@@ -1457,7 +1787,6 @@ dictionary with the RGE solution and to accept vectorized input.</li>
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fun</span><span class="p">,</span> <span class="n">scale_min</span><span class="p">,</span> <span class="n">scale_max</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Initialize.</span>
 <span class="sd">    Parameters:</span>
-<span class="sd">    </span>
 <span class="sd">    - fun: function of the scale that is expected to return a</span>
 <span class="sd">    dictionary with the RGE solution and to accept vectorized input.</span>
 <span class="sd">    - scale_min, scale_max: lower and upper boundaries of the scale</span>
@@ -1491,7 +1820,7 @@ dictionary with the RGE solution and to accept vectorized input.</li>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.classes.RGsolution.plot', this);">Show source &equiv;</a></p>
   <div id="source-wilson.classes.RGsolution.plot" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">part</span><span class="o">=</span><span class="s1">&#39;re&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">plotargs</span><span class="o">=</span><span class="p">{}):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">part</span><span class="o">=</span><span class="s1">&#39;re&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plotargs</span><span class="o">=</span><span class="p">{}):</span>
     <span class="sd">&quot;&quot;&quot;Plot the RG evolution of parameter `key`.</span>
 <span class="sd">    Parameters:</span>
 <span class="sd">    - part, scale, steps: see `plotdata`</span>
@@ -1499,7 +1828,7 @@ dictionary with the RGE solution and to accept vectorized input.</li>
 <span class="sd">    - plotargs: dictionary of arguments to be passed to plt.plot</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Please install matplotlib if you want to use the plot method&quot;</span><span class="p">)</span>
     <span class="n">pdat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotdata</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">part</span><span class="o">=</span><span class="n">part</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
@@ -1617,11 +1946,15 @@ and matching in SMEFT and WET.</p>
 <li><code>from_wc</code>: Return a <code>Wilson</code> instance initialized by a <code>wcxf.WC</code> instance</li>
 <li><code>load_wc</code>: Return a <code>Wilson</code> instance initialized by a WCxf file-like object</li>
 <li><code>match_run</code>: Run the Wilson coefficients to a different scale (and possibly different EFT) and return them as <code>wcxf.WC</code> instance</li>
+<li><code>set_option</code>: Set configuration option</li>
+<li><code>get_option</code>: Show configuration option</li>
+<li><code>set_default_option</code>: Class method! Set deault configuration option
+  affecting only future instances of the class.</li>
 </ul></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.classes.Wilson', this);">Show source &equiv;</a></p>
   <div id="source-wilson.classes.Wilson" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Wilson</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Wilson</span><span class="p">(</span><span class="n">ConfigurableClass</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Main interface to the wilson package, providing automatic running</span>
 <span class="sd">    and matching in SMEFT and WET.</span>
 
@@ -1632,7 +1965,37 @@ and matching in SMEFT and WET.</p>
 <span class="sd">    - `from_wc`: Return a `Wilson` instance initialized by a `wcxf.WC` instance</span>
 <span class="sd">    - `load_wc`: Return a `Wilson` instance initialized by a WCxf file-like object</span>
 <span class="sd">    - `match_run`: Run the Wilson coefficients to a different scale (and possibly different EFT) and return them as `wcxf.WC` instance</span>
+<span class="sd">    - `set_option`: Set configuration option</span>
+<span class="sd">    - `get_option`: Show configuration option</span>
+<span class="sd">    - `set_default_option`: Class method! Set deault configuration option</span>
+<span class="sd">      affecting only future instances of the class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># default config options:</span>
+    <span class="c1"># dictionary with option name as &#39;key&#39; and default option value as &#39;value&#39;</span>
+    <span class="n">_default_options</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;smeft_accuracy&#39;</span><span class="p">:</span> <span class="s1">&#39;integrate&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;qed_order&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="s1">&#39;qcd_order&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="s1">&#39;smeft_matching_order&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="s1">&#39;smeft_matchingscale&#39;</span><span class="p">:</span> <span class="mf">91.1876</span><span class="p">,</span>
+                        <span class="s1">&#39;mb_matchingscale&#39;</span><span class="p">:</span> <span class="mf">4.2</span><span class="p">,</span>
+                        <span class="s1">&#39;mc_matchingscale&#39;</span><span class="p">:</span> <span class="mf">1.3</span><span class="p">,</span>
+                        <span class="s1">&#39;parameters&#39;</span><span class="p">:</span> <span class="p">{},</span>
+                        <span class="p">}</span>
+
+    <span class="c1"># option schema:</span>
+    <span class="c1"># Voluptuous schema defining allowed option values/types</span>
+    <span class="n">_option_schema</span> <span class="o">=</span> <span class="n">vol</span><span class="o">.</span><span class="n">Schema</span><span class="p">({</span>
+        <span class="s1">&#39;smeft_accuracy&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">In</span><span class="p">([</span><span class="s1">&#39;integrate&#39;</span><span class="p">,</span><span class="s1">&#39;leadinglog&#39;</span><span class="p">]),</span>
+        <span class="s1">&#39;qed_order&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">In</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="s1">&#39;qcd_order&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">In</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="s1">&#39;smeft_matching_order&#39;</span><span class="p">:</span>  <span class="n">vol</span><span class="o">.</span><span class="n">In</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="s1">&#39;smeft_matchingscale&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">Coerce</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span>
+        <span class="s1">&#39;mb_matchingscale&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">Coerce</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span>
+        <span class="s1">&#39;mc_matchingscale&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">Coerce</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span>
+        <span class="s1">&#39;parameters&#39;</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">Schema</span><span class="p">({</span><span class="n">vol</span><span class="o">.</span><span class="n">Extra</span><span class="p">:</span> <span class="n">vol</span><span class="o">.</span><span class="n">Coerce</span><span class="p">(</span><span class="nb">float</span><span class="p">)}),</span>
+    <span class="p">})</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wcdict</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the `Wilson` class.</span>
 
@@ -1646,10 +2009,17 @@ and matching in SMEFT and WET.</p>
 <span class="sd">        - `eft`: input EFT</span>
 <span class="sd">        - `basis`: input basis</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wc</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="p">(</span><span class="n">eft</span><span class="o">=</span><span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="n">basis</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span>
                           <span class="n">values</span><span class="o">=</span><span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="o">.</span><span class="n">dict2values</span><span class="p">(</span><span class="n">wcdict</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a hash of the `Wilson` instance.</span>
+<span class="sd">        The hash changes when Wilson coefficient values or options are modified.</span>
+<span class="sd">        It assumes that `wcxf.WC` instances are not modified after instantiation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">)))</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_wc</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">wc</span><span class="p">):</span>
@@ -1669,6 +2039,31 @@ and matching in SMEFT and WET.</p>
         <span class="n">html</span> <span class="o">+=</span> <span class="n">r_wcxf</span>
         <span class="k">return</span> <span class="n">html</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parameters to be used for running and translation.&quot;&quot;&quot;</span>
+        <span class="c1"># start with a copy of the default parameters</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># overwrite by the user defined parameters, if any</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;parameters&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">p</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">matching_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parameters to be used for the SMEFT-&gt;WET matching.&quot;&quot;&quot;</span>
+        <span class="c1"># start with a copy of the numerical parameters</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># properly set &#39;loop_order&#39; for `match.smeft.match_all`</span>
+        <span class="n">p</span><span class="p">[</span><span class="s1">&#39;loop_order&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;smeft_matching_order&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">p</span>
+
+
+    <span class="k">def</span> <span class="nf">_wetrun_opt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a dictionary of options to pass to a `run.wet.WETrunner`</span>
+<span class="sd">        instance.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;qed_order&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;qed_order&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;qcd_order&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;qcd_order&#39;</span><span class="p">)}</span>
+
     <span class="k">def</span> <span class="nf">match_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run the Wilson coefficients to a different scale</span>
 <span class="sd">        (and possibly different EFT)</span>
@@ -1686,58 +2081,74 @@ and matching in SMEFT and WET.</p>
 <span class="sd">          is of interest. The sector names are defined in the WCxf basis file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cached</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_from_cache</span><span class="p">(</span><span class="n">sector</span><span class="o">=</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="o">=</span><span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="n">basis</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">cached</span>
-        <span class="n">scale_ew</span> <span class="o">=</span> <span class="mf">91.1876</span>
-        <span class="n">mb</span> <span class="o">=</span> <span class="mf">4.2</span>
-        <span class="n">mc</span> <span class="o">=</span> <span class="mf">1.3</span>
+        <span class="k">if</span> <span class="n">sectors</span>  <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+            <span class="c1"># the default value for sectors is &quot;None&quot; for translators</span>
+            <span class="n">translate_sectors</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">translate_sectors</span> <span class="o">=</span> <span class="n">sectors</span>
+        <span class="n">scale_ew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;smeft_matchingscale&#39;</span><span class="p">)</span>
+        <span class="n">mb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;mb_matchingscale&#39;</span><span class="p">)</span>
+        <span class="n">mc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;mc_matchingscale&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">basis</span> <span class="o">==</span> <span class="n">basis</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="n">eft</span> <span class="ow">and</span> <span class="n">scale</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scale</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span>  <span class="c1"># nothing to do</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="n">eft</span> <span class="ow">and</span> <span class="n">scale</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scale</span><span class="p">:</span>
+            <span class="n">wc_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>  <span class="c1"># only translation necessary</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">wc_out</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;SMEFT&#39;</span><span class="p">:</span>
+            <span class="n">smeft_accuracy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;smeft_accuracy&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;SMEFT&#39;</span><span class="p">:</span>
-                <span class="n">smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">)</span>
+                <span class="n">smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">))</span>
                 <span class="c1"># if input and output EFT ist SMEFT, just run.</span>
-                <span class="n">wc_out</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+                <span class="n">wc_out</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="n">smeft_accuracy</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="n">wc_out</span><span class="o">.</span><span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">wc_out</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># if SMEFT -&gt; WET-x: match to WET at the EW scale</span>
                 <span class="n">wc_ew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_from_cache</span><span class="p">(</span><span class="n">sector</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale_ew</span><span class="p">,</span> <span class="n">eft</span><span class="o">=</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">wc_ew</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                    <span class="n">smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">)</span>
-                    <span class="n">wc_ew</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale_ew</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">wc_ew</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scale</span> <span class="o">==</span> <span class="n">scale_ew</span><span class="p">:</span>
+                        <span class="n">wc_ew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>  <span class="c1"># no need to run</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">))</span>
+                        <span class="n">wc_ew</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale_ew</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="n">smeft_accuracy</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">scale_ew</span><span class="p">,</span> <span class="n">wc_ew</span><span class="o">.</span><span class="n">eft</span><span class="p">,</span> <span class="n">wc_ew</span><span class="o">.</span><span class="n">basis</span><span class="p">,</span> <span class="n">wc_ew</span><span class="p">)</span>
-                <span class="n">wet</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_ew</span><span class="p">)</span>
+                <span class="n">wet</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_ew</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">]:</span>
-            <span class="n">wet</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;JMS&#39;</span><span class="p">))</span>
+            <span class="n">wet</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">),</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input EFT {} unknown or not supported&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input EFT </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span><span class="si">}</span><span class="s2"> unknown or not supported&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">eft</span> <span class="o">==</span> <span class="n">wet</span><span class="o">.</span><span class="n">eft</span><span class="p">:</span>  <span class="c1"># just run</span>
-            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">wc_out</span>
         <span class="k">elif</span> <span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET-4&#39;</span> <span class="ow">and</span> <span class="n">wet</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET&#39;</span><span class="p">:</span>  <span class="c1"># match at mb</span>
-            <span class="n">wc_mb</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-            <span class="n">wet4</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mb</span><span class="p">)</span>
-            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet4</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+            <span class="n">wc_mb</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
+            <span class="n">wet4</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mb</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
+            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet4</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">wc_out</span>
         <span class="k">elif</span> <span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET-3&#39;</span> <span class="ow">and</span> <span class="n">wet</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">:</span>  <span class="c1"># match at mc</span>
-            <span class="n">wc_mc</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-            <span class="n">wet3</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mc</span><span class="p">)</span>
-            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet3</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+            <span class="n">wc_mc</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
+            <span class="n">wet3</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mc</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
+            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet3</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">wc_out</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET-3&#39;</span> <span class="ow">and</span> <span class="n">wet</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET&#39;</span><span class="p">:</span>  <span class="c1"># match at mb and mc</span>
-            <span class="n">wc_mb</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-            <span class="n">wet4</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mb</span><span class="p">)</span>
-            <span class="n">wc_mc</span> <span class="o">=</span> <span class="n">wet4</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-            <span class="n">wet3</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mc</span><span class="p">)</span>
-            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet3</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+            <span class="n">wc_mb</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
+            <span class="n">wet4</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mb</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
+            <span class="n">wc_mc</span> <span class="o">=</span> <span class="n">wet4</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
+            <span class="n">wet3</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mc</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
+            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet3</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">wc_out</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Running from {} to {} not implemented&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">wet</span><span class="o">.</span><span class="n">eft</span><span class="p">,</span> <span class="n">eft</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running from </span><span class="si">{</span><span class="n">wet</span><span class="o">.</span><span class="n">eft</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">eft</span><span class="si">}</span><span class="s2"> not implemented&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">clear_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">def</span> <span class="nf">_get_from_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sector</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Try to load a set of Wilson coefficients from the cache, else return</span>
@@ -1745,7 +2156,7 @@ and matching in SMEFT and WET.</p>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">eft</span><span class="p">][</span><span class="n">scale</span><span class="p">][</span><span class="n">basis</span><span class="p">][</span><span class="n">sector</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">None</span>
+            <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_set_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sector</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">eft</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
@@ -1766,6 +2177,7 @@ and matching in SMEFT and WET.</p>
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
           <li><a href="#wilson.classes.Wilson">Wilson</a></li>
+          <li><a href="#wilson.classes.ConfigurableClass">ConfigurableClass</a></li>
           <li>builtins.object</li>
           </ul>
           <h3>Static methods</h3>
@@ -1803,10 +2215,57 @@ and matching in SMEFT and WET.</p>
 <span class="sd">    - `eft`: input EFT</span>
 <span class="sd">    - `basis`: input basis</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">wc</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="p">(</span><span class="n">eft</span><span class="o">=</span><span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="n">basis</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span>
                       <span class="n">values</span><span class="o">=</span><span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="o">.</span><span class="n">dict2values</span><span class="p">(</span><span class="n">wcdict</span><span class="p">))</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wilson.classes.Wilson.clear_cache">
+    <p>def <span class="ident">clear_cache</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.classes.Wilson.clear_cache', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.classes.Wilson.clear_cache" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">clear_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wilson.classes.Wilson.get_option">
+    <p>def <span class="ident">get_option</span>(</p><p>self, key)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return the current value of the option <code>key</code> (string).</p>
+<p>Instance method, only refers to current instance.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.classes.Wilson.get_option', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.classes.Wilson.get_option" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the current value of the option `key` (string).</span>
+<span class="sd">    Instance method, only refers to current instance.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_options</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 </pre></div>
 
   </div>
@@ -1855,58 +2314,99 @@ and return them as <code>wcxf.WC</code> instance.</p>
 <span class="sd">      is of interest. The sector names are defined in the WCxf basis file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cached</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_from_cache</span><span class="p">(</span><span class="n">sector</span><span class="o">=</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="o">=</span><span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="n">basis</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">cached</span>
-    <span class="n">scale_ew</span> <span class="o">=</span> <span class="mf">91.1876</span>
-    <span class="n">mb</span> <span class="o">=</span> <span class="mf">4.2</span>
-    <span class="n">mc</span> <span class="o">=</span> <span class="mf">1.3</span>
+    <span class="k">if</span> <span class="n">sectors</span>  <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+        <span class="c1"># the default value for sectors is &quot;None&quot; for translators</span>
+        <span class="n">translate_sectors</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">translate_sectors</span> <span class="o">=</span> <span class="n">sectors</span>
+    <span class="n">scale_ew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;smeft_matchingscale&#39;</span><span class="p">)</span>
+    <span class="n">mb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;mb_matchingscale&#39;</span><span class="p">)</span>
+    <span class="n">mc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;mc_matchingscale&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">basis</span> <span class="o">==</span> <span class="n">basis</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="n">eft</span> <span class="ow">and</span> <span class="n">scale</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scale</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span>  <span class="c1"># nothing to do</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="n">eft</span> <span class="ow">and</span> <span class="n">scale</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scale</span><span class="p">:</span>
+        <span class="n">wc_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>  <span class="c1"># only translation necessary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wc_out</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;SMEFT&#39;</span><span class="p">:</span>
+        <span class="n">smeft_accuracy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;smeft_accuracy&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;SMEFT&#39;</span><span class="p">:</span>
-            <span class="n">smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">)</span>
+            <span class="n">smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">))</span>
             <span class="c1"># if input and output EFT ist SMEFT, just run.</span>
-            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+            <span class="n">wc_out</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="n">smeft_accuracy</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;SMEFT&#39;</span><span class="p">,</span> <span class="n">wc_out</span><span class="o">.</span><span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">wc_out</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># if SMEFT -&gt; WET-x: match to WET at the EW scale</span>
             <span class="n">wc_ew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_from_cache</span><span class="p">(</span><span class="n">sector</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale_ew</span><span class="p">,</span> <span class="n">eft</span><span class="o">=</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">wc_ew</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">)</span>
-                <span class="n">wc_ew</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale_ew</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">wc_ew</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scale</span> <span class="o">==</span> <span class="n">scale_ew</span><span class="p">:</span>
+                    <span class="n">wc_ew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>  <span class="c1"># no need to run</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">smeft</span> <span class="o">=</span> <span class="n">SMEFT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;Warsaw&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">))</span>
+                    <span class="n">wc_ew</span> <span class="o">=</span> <span class="n">smeft</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale_ew</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="n">smeft_accuracy</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">scale_ew</span><span class="p">,</span> <span class="n">wc_ew</span><span class="o">.</span><span class="n">eft</span><span class="p">,</span> <span class="n">wc_ew</span><span class="o">.</span><span class="n">basis</span><span class="p">,</span> <span class="n">wc_ew</span><span class="p">)</span>
-            <span class="n">wet</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_ew</span><span class="p">)</span>
+            <span class="n">wet</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_ew</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
     <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;WET&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">]:</span>
-        <span class="n">wet</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;JMS&#39;</span><span class="p">))</span>
+        <span class="n">wet</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">),</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input EFT {} unknown or not supported&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input EFT </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">eft</span><span class="si">}</span><span class="s2"> unknown or not supported&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">eft</span> <span class="o">==</span> <span class="n">wet</span><span class="o">.</span><span class="n">eft</span><span class="p">:</span>  <span class="c1"># just run</span>
-        <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+        <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">eft</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wc_out</span>
     <span class="k">elif</span> <span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET-4&#39;</span> <span class="ow">and</span> <span class="n">wet</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET&#39;</span><span class="p">:</span>  <span class="c1"># match at mb</span>
-        <span class="n">wc_mb</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-        <span class="n">wet4</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mb</span><span class="p">)</span>
-        <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet4</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+        <span class="n">wc_mb</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
+        <span class="n">wet4</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mb</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
+        <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet4</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wc_out</span>
     <span class="k">elif</span> <span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET-3&#39;</span> <span class="ow">and</span> <span class="n">wet</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET-4&#39;</span><span class="p">:</span>  <span class="c1"># match at mc</span>
-        <span class="n">wc_mc</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-        <span class="n">wet3</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mc</span><span class="p">)</span>
-        <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet3</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+        <span class="n">wc_mc</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
+        <span class="n">wet3</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mc</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
+        <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet3</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wc_out</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET-3&#39;</span> <span class="ow">and</span> <span class="n">wet</span><span class="o">.</span><span class="n">eft</span> <span class="o">==</span> <span class="s1">&#39;WET&#39;</span><span class="p">:</span>  <span class="c1"># match at mb and mc</span>
-        <span class="n">wc_mb</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-        <span class="n">wet4</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mb</span><span class="p">)</span>
-        <span class="n">wc_mc</span> <span class="o">=</span> <span class="n">wet4</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">)</span>
-        <span class="n">wet3</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mc</span><span class="p">)</span>
-        <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet3</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
+        <span class="n">wc_mb</span> <span class="o">=</span> <span class="n">wet</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-4&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
+        <span class="n">wet4</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mb</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
+        <span class="n">wc_mc</span> <span class="o">=</span> <span class="n">wet4</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="s1">&#39;JMS&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matching_parameters</span><span class="p">)</span>
+        <span class="n">wet3</span> <span class="o">=</span> <span class="n">WETrunner</span><span class="p">(</span><span class="n">wc_mc</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_wetrun_opt</span><span class="p">())</span>
+        <span class="n">wc_out</span> <span class="o">=</span> <span class="n">wet3</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">sectors</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">sectors</span><span class="o">=</span><span class="n">translate_sectors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_cache</span><span class="p">(</span><span class="n">sectors</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="s1">&#39;WET-3&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">wc_out</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wc_out</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Running from {} to {} not implemented&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">wet</span><span class="o">.</span><span class="n">eft</span><span class="p">,</span> <span class="n">eft</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running from </span><span class="si">{</span><span class="n">wet</span><span class="o">.</span><span class="n">eft</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">eft</span><span class="si">}</span><span class="s2"> not implemented&quot;</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wilson.classes.Wilson.set_option">
+    <p>def <span class="ident">set_option</span>(</p><p>self, key, value)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Set the option <code>key</code> (string) to <code>value</code>.</p>
+<p>Instance method, affects only current instance.
+This will clear the cache.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.classes.Wilson.set_option', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.classes.Wilson.set_option" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set the option `key` (string) to `value`.</span>
+<span class="sd">    Instance method, affects only current instance.</span>
+<span class="sd">    This will clear the cache.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_option_schema</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">}))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">clear_cache</span><span class="p">()</span>
 </pre></div>
 
   </div>
@@ -1915,6 +2415,28 @@ and return them as <code>wcxf.WC</code> instance.</p>
   </div>
   
           <h3>Instance variables</h3>
+            <div class="item">
+            <p id="wilson.classes.Wilson.matching_parameters" class="name">var <span class="ident">matching_parameters</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Parameters to be used for the SMEFT-&gt;WET matching.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="wilson.classes.Wilson.parameters" class="name">var <span class="ident">parameters</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Parameters to be used for running and translation.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
             <div class="item">
             <p id="wilson.classes.Wilson.wc" class="name">var <span class="ident">wc</span></p>
             
@@ -1968,6 +2490,36 @@ and return them as <code>wcxf.WC</code> instance.</p>
     <span class="sd">&quot;&quot;&quot;Return a `Wilson` instance initialized by a WCxf file-like object&quot;&quot;&quot;</span>
     <span class="n">wc</span> <span class="o">=</span> <span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_wc</span><span class="p">(</span><span class="n">wc</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="wilson.classes.Wilson.set_default_option">
+    <p>def <span class="ident">set_default_option</span>(</p><p>cls, key, value)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Class method. Set the default value of the option <code>key</code> (string)
+to <code>value</code> for all future instances of the class.</p>
+<p>Note that this does not affect existing instances or the instance
+called from.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-wilson.classes.Wilson.set_default_option', this);">Show source &equiv;</a></p>
+  <div id="source-wilson.classes.Wilson.set_default_option" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">set_default_option</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class method. Set the default value of the option `key` (string)</span>
+<span class="sd">    to `value` for all future instances of the class.</span>
+<span class="sd">    Note that this does not affect existing instances or the instance</span>
+<span class="sd">    called from.&quot;&quot;&quot;</span>
+    <span class="bp">cls</span><span class="o">.</span><span class="n">_default_options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_option_schema</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">}))</span>
 </pre></div>
 
   </div>
